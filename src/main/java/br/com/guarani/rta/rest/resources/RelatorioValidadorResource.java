@@ -61,144 +61,85 @@ import net.lingala.zip4j.exception.ZipException;
 @Path("/relatorios")
 public class RelatorioValidadorResource {
 	
-	private String folderUser = null;
+		private String folderUser = null;
+		
+		@Autowired
+		private TesteFile relatorios;
+		 
+		@GET
+		@Consumes("text/html")
+		@Produces(MediaType.APPLICATION_JSON)
+		public String listErros(@Context ServletContext ctx) throws JsonGenerationException, JsonMappingException, IOException{
+			ObjectMapper mapper = new ObjectMapper();
 	
-	@Autowired
-	private CampoDAO campodao;
-	
-	@Autowired
-	private TesteFile relatorios;
-	 
-	@GET
-	@Consumes("text/html")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String listErros(@Context ServletContext ctx) throws JsonGenerationException, JsonMappingException, IOException{
-		ObjectMapper mapper = new ObjectMapper();
-
-	    File folder = new File(ctx.getRealPath("/arquivos/" + folderUser));
-        	 
-		List<TabelasErros> tabErros = new ArrayList<TabelasErros>();
-		
-		tabErros =	relatorios.listaErros(folder);
-		
-		folderUser = null;
-				
-		return mapper.writeValueAsString(tabErros);
-	} 
-	   
-		@ResponseStatus(value=HttpStatus.OK)
-		@POST
-		@Produces(MediaType.MULTIPART_FORM_DATA)
-		@Consumes(MediaType.MULTIPART_FORM_DATA)
-	    @Path("/upload")
-	    public void listValid(@Context HttpServletRequest req, @Context ServletContext ct) throws IOException, FileUploadException {
-					
-			if(folderUser == null){		
-				folderUser = RandomStringUtils.randomAlphabetic(10);			
-			    File folder = new File(ct.getRealPath("/arquivos/" + folderUser));
-			    folder.mkdir();
-			}
-			
-			
-			ServletFileUpload fileUpload = new ServletFileUpload();
-			FileItemIterator iterator = fileUpload.getItemIterator(req);
-			
-			while (iterator.hasNext()) {	
-				
-				
-                   FileItemStream item = iterator.next();
-                   
-                   String nameItemExtension = item.getName();
-                   
-					if(isZip(nameItemExtension)){
-						 
-						zipToFiles(item);
-						
-					}else{
-		              
-						streamToFile(req, item, "arquivos/" + folderUser);   				   
-
-					}
-       		 }
-	    } 
-
- 
-	
-		
-		private boolean isZip(String name) {
-			String extension = name.substring(name.lastIndexOf(".") + 1, name.length());
-				if(extension.equals("rar")){
-					return true;
-				}
-			return false;
-		}
-		
-		
-		
-		
-		
-		
-		private void zipToFiles(FileItemStream item){
-		    try {
-				
-		    	InputStream inputStream = item.openStream();
-		    	
-		    	File file = new File("zip");
-		    	
-		    	try (FileOutputStream out = new FileOutputStream(file)) {
-			        IOUtils.copy(inputStream, out);
-			        inputStream.close();
-			    }
-		    	
-		    	FileInputStream input = new FileInputStream(file);
-
-		        ZipInputStream zipStream = new ZipInputStream(input);
-		        
-		        ZipEntry entry;
-		       
-		        while ((entry = zipStream.getNextEntry()) != null)
-		        {
-		            while (zipStream.available() > 0)
-		            	zipStream.read();
-		            	System.out.println(entry.toString());
-		        }
-		        				
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		
-
-		private void unZip(String zip, String folderStract){
-	         try {
-				ZipFile zipFile = new ZipFile(zip);
-				zipFile.extractAll(folderStract);
-			} catch (ZipException e) {
-				e.printStackTrace();
-			}
-		 }
-	
-			
-		private File streamToFile (HttpServletRequest req, FileItemStream item, String baseFolder) throws IOException {            
-			
-			String realPath  = req.getSession().getServletContext().getRealPath("/" + baseFolder);
-		    File file = new File(realPath + "/" + item.getName());
+		    File folder = new File(ctx.getRealPath("/arquivos/" + folderUser));
+			List<TabelasErros> tabErros = new ArrayList<TabelasErros>();
+			tabErros =	relatorios.listaErros(folder);
+			folderUser = null;
+			return mapper.writeValueAsString(tabErros);
+		} 
 		   
-		    InputStream inputStream = item.openStream();
-		    
+			@ResponseStatus(value=HttpStatus.OK)
+			@POST
+			@Produces(MediaType.MULTIPART_FORM_DATA)
+			@Consumes(MediaType.MULTIPART_FORM_DATA)
+		    @Path("/upload")
+		    public void listValid(@Context HttpServletRequest req, @Context ServletContext ct) throws IOException, FileUploadException {
+						
+				if(folderUser == null){		
+					folderUser = RandomStringUtils.randomAlphabetic(10);			
+				    File folder = new File(ct.getRealPath("/arquivos/" + folderUser));
+				    folder.mkdir();
+				}
+				
+				ServletFileUpload fileUpload = new ServletFileUpload();
+				FileItemIterator iterator = fileUpload.getItemIterator(req);
+				
+				while (iterator.hasNext()) {	
+					
+	                   FileItemStream item = iterator.next();
+	                   File file = streamToFile(req, item, "arquivos/" + folderUser);   				   
+			                
+	                   			if(isZip(file.getName())){
+			           				String realPath  = req.getSession().getServletContext().getRealPath("/arquivos");
+			                	    unZip(file.getAbsolutePath(), realPath +"/"+folderUser);
+								}
+							
+	       		 	  }
+		    } 
 
-			    try (FileOutputStream out = new FileOutputStream(file)) {
-			        IOUtils.copy(inputStream, out);
-			        inputStream.close();
-			    }
-			    
-		    return file;            
-		}
-		
-		
-		
-
-
+						
+			private boolean isZip(String name) {
+				String extension = name.substring(name.lastIndexOf(".") + 1, name.length());
+					if(extension.equals("zip")){
+						return true;
+					}
+				return false;
+			}
+					
+	
+			private void unZip(String zip, String folderStract){
+		         try {
+					ZipFile zipFile = new ZipFile(zip);
+					zipFile.extractAll(folderStract);
+					zipFile.getFile().delete();
+				} catch (ZipException e) {
+					e.printStackTrace();
+				}
+			 }
+			
+						 
+			private File streamToFile (HttpServletRequest req, FileItemStream item, String baseFolder) throws IOException {            
+				String realPath  = req.getSession().getServletContext().getRealPath("/" + baseFolder);
+			    File file = new File(realPath + "/" + item.getName());
+			   
+			    InputStream inputStream = item.openStream();
+	
+				    try (FileOutputStream out = new FileOutputStream(file)) {
+				        IOUtils.copy(inputStream, out);
+				        inputStream.close();
+				    }
+			    return file;            
+			}
 
 }

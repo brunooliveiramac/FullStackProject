@@ -4,51 +4,38 @@ import java.util.List;
 
 public class LinhaErro {
 	
-	private String nome;
-	private String conteudo;
-	private String comentario;
+	private Integer num_linha;
 
-	private List<Erros> children;
+	private List<Registros> erros;
 
-
-	public String getNome() {
-		return nome;
+	
+	
+	
+	public LinhaErro(Integer num_linha, List<Registros> erros) {
+		this.num_linha = num_linha;
+		this.erros = erros;
 	}
 
-
-	public void setNome(String nome) {
-		this.nome = nome;
+	public LinhaErro() {
+		// TODO Auto-generated constructor stub
 	}
 
-
-	public String getConteudo() {
-		return conteudo;
+	public Integer getNum_linha() {
+		return num_linha;
 	}
 
-
-	public void setConteudo(String conteudo) {
-		this.conteudo = conteudo;
+	public void setNum_linha(Integer num_linha) {
+		this.num_linha = num_linha;
 	}
 
-
-	public String getComentario() {
-		return comentario;
+	public List<Registros> getErros() {
+		return erros;
 	}
 
-
-	public void setComentario(String comentario) {
-		this.comentario = comentario;
+	public void setErros(List<Registros> erros) {
+		this.erros = erros;
 	}
-
-
-	public List<Erros> getChildren() {
-		return children;
-	}
-
-
-	public void setChildren(List<Erros> children) {
-		this.children = children;
-	}
+	
 	
 	
 

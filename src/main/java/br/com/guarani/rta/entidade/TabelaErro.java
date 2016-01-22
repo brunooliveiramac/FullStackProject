@@ -4,43 +4,42 @@ import java.util.List;
 
 public class TabelaErro {
 	
-	private String nome;
-	private String conteudo;
-	private String comentario;
+	private String nome_tabela;
 
-	private List<LinhaErro> children;
+	private List<LinhaErro> linhas;
 
-	public String getNome() {
-		return nome;
+	
+	
+	public TabelaErro() {
+
+	}
+	
+	public TabelaErro(String nome_tabela, List<LinhaErro> linhas) {
+	this.nome_tabela = nome_tabela;
+	this.linhas = linhas;
+	
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+
+
+	public String getNome_tabela() {
+		return nome_tabela;
 	}
 
-	public String getConteudo() {
-		return conteudo;
+	public void setNome_tabela(String nome_tabela) {
+		this.nome_tabela = nome_tabela;
 	}
 
-	public void setConteudo(String conteudo) {
-		this.conteudo = conteudo;
+	public List<LinhaErro> getLinhas() {
+		return linhas;
 	}
 
-	public String getComentario() {
-		return comentario;
+	public void setLinhas(List<LinhaErro> linhas) {
+		this.linhas = linhas;
 	}
-
-	public void setComentario(String comentario) {
-		this.comentario = comentario;
-	}
-
-	public List<LinhaErro> getChildren() {
-		return children;
-	}
-
-	public void setChildren(List<LinhaErro> children) {
-		this.children = children;
-	}
+	
+	
+	
 
 	
 	

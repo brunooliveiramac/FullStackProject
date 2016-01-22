@@ -1,33 +1,18 @@
 package br.com.guarani.rta.entidade;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
+public class Registros {
 
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
-@Entity 
-@Table(name ="relatorioerros")
-public class RelatorioErros {
-	
-	@Id
-	@GeneratedValue
 	private int id;
 	private String campo_nome;
 	private String conteudo_campo;
 	private String valor_esperado;
 	private String comentario_erro;
 	
-	public RelatorioErros() {
+	public Registros() {
 	}
 
 	
-	public RelatorioErros(int id, String campo_nome, String conteudo, String valor_esperado, String comentario_erro) {
-		super();
+	public Registros(int id, String campo_nome, String conteudo, String valor_esperado, String comentario_erro) {
 		this.id = id;
 		this.conteudo_campo = conteudo;
 		this.campo_nome = campo_nome;
@@ -37,8 +22,7 @@ public class RelatorioErros {
 	
 	
 	
-	public RelatorioErros(String campo_nome, String conteudo_campo, String valor_esperado, String comentario_erro) {
-		super();
+	public Registros(String campo_nome, String conteudo_campo, String valor_esperado, String comentario_erro) {
 		this.campo_nome = campo_nome;
 		this.conteudo_campo = conteudo_campo;
 		this.valor_esperado = valor_esperado;
@@ -89,5 +73,4 @@ public class RelatorioErros {
 	public String toString() {
 		return  campo_nome + comentario_erro; 
 	}
-	
 }

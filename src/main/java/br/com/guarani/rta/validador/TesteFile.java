@@ -63,6 +63,8 @@ public class TesteFile {
 			 
 		        if (fileEntry.isFile()) {		        	
 
+        	    	tabelasErros = new TabelasErros();
+
 		        	String basename = FilenameUtils.getBaseName(fileEntry.toString());
 		        
 		        	campos = campodao.porNomeTabela(basename);
@@ -76,16 +78,15 @@ public class TesteFile {
 		        	  
 		        	    while ((read = in.readLine()) != null) {
 		        	    	
-		        	    	tabelasErros = new TabelasErros();
 				    	    
-				        	utils = new UtilsValidator(tabelasErros);
+				        	utils = new UtilsValidator();
 		        	        
 		        	        dados = UtilsValidator.checaCaractere(read, "|",200);	
 		        	        
 		        	        //Comparar quantidade de campos com o do banco
 		        	        
-		        	        if(dados.size() == campos.size()){
-		        				System.out.println("preencha todos os campos");
+		        	        if(dados.size() != campos.size()){
+		        				System.out.println("Preencha todos os campos");
 		        	        	break;
 		        	        }
 		        	        
@@ -110,7 +111,7 @@ public class TesteFile {
 	 			
 						         			carga = dados.get(i).length();
 						         			
-						         			utils.verificaTamanho(basename, campo.getNomef(), tam, carga, dados.get(i));
+						         			utils.verificaTamanho(basename, campo, tam, carga, dados.get(i));
 						         			
 						         			utils.validaAtributos(campo, dados.get(i));
 						         			

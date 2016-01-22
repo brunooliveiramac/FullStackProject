@@ -11,23 +11,29 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
 
 import br.com.guarani.rta.entidade.Campo;
+import br.com.guarani.rta.entidade.LinhaErro;
+import br.com.guarani.rta.entidade.Registros;
 import br.com.guarani.rta.entidade.RelatorioErros;
 import br.com.guarani.rta.entidade.TabelasErros;
 
 
 public class UtilsValidator {
 	
-	private static List<RelatorioErros> erros; 
+	public TabelasErros tabelasErros;
+	public LinhaErro linhaErro;
+	public Registros registro;
 	
+	public List<LinhaErro> linhaErros;
+	public List<Registros> registros;
 	
-	private  TabelasErros tabelasErro;
-	private  List<TabelasErros> tabelasErros;
-	private  RelatorioErros relatorioErros;
-	
-
-	public UtilsValidator(TabelasErros tabelasErro){
-		this.erros = new ArrayList<RelatorioErros>();
-		this.tabelasErro = new TabelasErros();
+	public UtilsValidator(){
+		tabelasErros = new TabelasErros();
+		linhaErro = new LinhaErro();
+		registro = new Registros();
+		
+		linhaErros = new ArrayList<>();
+		registros = new ArrayList<>();
+		
 	}
 	
 	
@@ -60,34 +66,36 @@ public class UtilsValidator {
 		}
 	}	
 	
-	public  boolean verificaTamanho(String basename, String campo, Integer tamBd, int tamCarga, String part) throws IOException{
+	public  boolean verificaTamanho(String basename, Campo campo, Integer tamBd, int tamCarga, String part) throws IOException{
 		if(tamBd <= tamCarga) {
 			return true;
 		} 
 		else
 			
-		relatorioErros = new RelatorioErros(1, campo,  part, tamBd.toString(), " Tamanho invalido");
+		registro = new Registros(campo.getNomef(), part, "Valor esperado: "+tamBd.toString() , " Tamanho do campo incorreta");
 		
-		erros.add(relatorioErros);
+		registros.add(registro);
 		
-		tabelasErro.setNome_tabela(basename);
 		
-		tabelasErro.setErros(erros);
+		
 		
 		return false;
 	}
 	
 	
-	public static boolean isTelefone(String numeroTelefone) {
+	public static  boolean isTelefone(String numeroTelefone, String camponome) {
         if( numeroTelefone.matches(".((10)|([1-9][1-9]).)\\s9?[6-9][0-9]{3}-[0-9]{4}") ||
                 numeroTelefone.matches(".((10)|([1-9][1-9]).)\\s[2-5][0-9]{3}-[0-9]{4}"))
         	return true;
         else
-        	return false;
+        
+     
+        
+        return false;
     }
 	
 	
-	public static boolean isCep(String cep){
+	public static  boolean isCep(String cep){
 		if(cep.matches("\\d{5}-\\d{3}")){
 			return true;
 		}
@@ -98,7 +106,7 @@ public class UtilsValidator {
 	
 	
 	
-	public static boolean isCnpj(String c){
+	public static  boolean isCnpj(String c){
 		if(c.matches("^([0-9]{2}[.]?[0-9]{3}[.]?[0-9]{3}[/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[.]?[0-9]{3}[.]?[0-9]{3}[-]?[0-9]{2})$")){
 		 	return true;
 		}
@@ -155,7 +163,7 @@ public class UtilsValidator {
 			}else{
 				atributo =	campo.getAtributos().getId();		
 				if(atributo == 1){
-					UtilsValidator.isTelefone(part);
+					UtilsValidator.isTelefone(part, campo.getNomef());
 				}
 				if(atributo == 2){
 					UtilsValidator.isCnpj(part);
@@ -177,19 +185,7 @@ public class UtilsValidator {
 	}
 	
 	
-	public static List<RelatorioErros> getErros() {
-		return erros;
-	}
 	
-
-	public List<TabelasErros> getTabelasErros() {
-		return tabelasErros;
-	}
-	
-	
-	public TabelasErros getTabelasErro() {
-		return tabelasErro;
-	}
 	
 	
 	public static List<String> checaCaractere(String part, String caractere, Integer tamMax) {
