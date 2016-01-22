@@ -25,6 +25,7 @@ angular.module('guaraniApp').controller('ValidadorController', ['$scope', 'Uploa
                     	$http.get('rest/relatorios')
 	            		.success(function(tabelaserros){
 	            			$scope.tabelaserros = tabelaserros;
+	            			console.log(tabelaserros);
 	            		}).error(function(){
 	            			$scope.mensagem = 'Erro ao obter Tabelas de Erros!';
 	            		});

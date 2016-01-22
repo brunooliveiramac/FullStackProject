@@ -19,21 +19,14 @@ import br.com.guarani.rta.entidade.TabelasErros;
 
 public class UtilsValidator {
 	
-	public TabelasErros tabelasErros;
-	public LinhaErro linhaErro;
+	
 	public Registros registro;
 	
-	public List<LinhaErro> linhaErros;
 	public List<Registros> registros;
 	
 	public UtilsValidator(){
-		tabelasErros = new TabelasErros();
-		linhaErro = new LinhaErro();
 		registro = new Registros();
-		
-		linhaErros = new ArrayList<>();
 		registros = new ArrayList<>();
-		
 	}
 	
 	
@@ -64,20 +57,18 @@ public class UtilsValidator {
 		} catch (Exception e) {
 			return false;
 		}
+	
 	}	
 	
 	public  boolean verificaTamanho(String basename, Campo campo, Integer tamBd, int tamCarga, String part) throws IOException{
 		if(tamBd <= tamCarga) {
 			return true;
 		} 
+		
 		else
-			
-		registro = new Registros(campo.getNomef(), part, "Valor esperado: "+tamBd.toString() , " Tamanho do campo incorreta");
 		
-		registros.add(registro);
-		
-		
-		
+			registro = new Registros(campo.getNomef(), part, "Valor esperado: "+tamBd.toString() , " Tamanho do campo incorreto.");
+		    registros.add(registro);
 		
 		return false;
 	}
@@ -217,6 +208,29 @@ public class UtilsValidator {
 	    }
 	   
 	   return campos;
+	}
+
+
+	
+
+
+	public Registros getRegistro() {
+		return registro;
+	}
+
+
+	public void setRegistro(Registros registro) {
+		this.registro = registro;
+	}
+
+
+	public List<Registros> getRegistros() {
+		return registros;
+	}
+
+
+	public void setRegistros(List<Registros> registros) {
+		this.registros = registros;
 	}
 	
 

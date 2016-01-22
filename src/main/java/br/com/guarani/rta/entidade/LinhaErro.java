@@ -1,9 +1,19 @@
 package br.com.guarani.rta.entidade;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class LinhaErro {
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+public class LinhaErro implements Serializable{
 	
+
+	private static final long serialVersionUID = 1L;
+
 	private Integer num_linha;
 
 	private List<Registros> erros;

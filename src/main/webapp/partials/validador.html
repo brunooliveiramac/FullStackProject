@@ -44,19 +44,27 @@
 			</body>
 			
 			
-			<h5>Relatório</h5>
+			<h5>Relatório</h5> 
 			
-			<div ng-repeat="tabelaserro in tabelaserros">
+			<div style="margin-top: 10px; margin-left:5px" ng-repeat="tabelaserro in tabelaserros">
 					<h5>{{tabelaserro.nome_tabela}}</h5>
-						<div ng-repeat="erro  in tabelaserro.erros">
-							<p style="padding:1px;">
-							 <strong>Campo:</strong> {{erro.campo_nome}} <strong>Comentário:</strong>{{erro.comentario_erro}} 
-							</p>
-					 					 
-						</div>
+
+						<div ng-repeat="linha in tabelaserro.linhas">
+							 <strong style="margin-left:10px;">Linha:</strong> {{linha.num_linha}}
+								
+								<div ng-repeat="erro in linha.erros">
+									<strong style="margin-left:20px">Campo:</strong> {{erro.campo_nome}} <strong> Conteído: </strong> {{erro.conteudo_campo}} <strong> Comentário:</strong>{{erro.comentario_erro}} 
+						 		</div> 
+					 		
+						</div> 
 						
 			
 			</div>
+			
+			
+			
+			
+			
 			
 </div>
 

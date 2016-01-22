@@ -51,6 +51,7 @@ import br.com.guarani.rta.entidade.Campo;
 import br.com.guarani.rta.entidade.Projeto;
 import br.com.guarani.rta.entidade.Projetos;
 import br.com.guarani.rta.entidade.RelatorioErros;
+import br.com.guarani.rta.entidade.TabelaErro;
 import br.com.guarani.rta.entidade.TabelasErros;
 import br.com.guarani.rta.validador.TesteFile;
 import br.com.guarani.rta.validador.UtilsValidator;
@@ -63,21 +64,20 @@ public class RelatorioValidadorResource {
 	
 		private String folderUser = null;
 		
-		@Autowired
-		private TesteFile relatorios;
-		 
-		@GET
-		@Consumes("text/html")
-		@Produces(MediaType.APPLICATION_JSON)
-		public String listErros(@Context ServletContext ctx) throws JsonGenerationException, JsonMappingException, IOException{
+			@Autowired
+			private TesteFile relatorios;
+			 
+			@GET
+			@Consumes("text/html")
+			@Produces(MediaType.APPLICATION_JSON)
+			public String listErros(@Context ServletContext ctx) throws JsonGenerationException, JsonMappingException, IOException{
 			ObjectMapper mapper = new ObjectMapper();
-	
 		    File folder = new File(ctx.getRealPath("/arquivos/" + folderUser));
-			List<TabelasErros> tabErros = new ArrayList<TabelasErros>();
+			List<TabelaErro> tabErros = new ArrayList<TabelaErro>();
 			tabErros =	relatorios.listaErros(folder);
 			folderUser = null;
 			return mapper.writeValueAsString(tabErros);
-		} 
+			} 
 		   
 			@ResponseStatus(value=HttpStatus.OK)
 			@POST
@@ -94,7 +94,7 @@ public class RelatorioValidadorResource {
 				
 				ServletFileUpload fileUpload = new ServletFileUpload();
 				FileItemIterator iterator = fileUpload.getItemIterator(req);
-				
+				 
 				while (iterator.hasNext()) {	
 					
 	                   FileItemStream item = iterator.next();
@@ -104,42 +104,45 @@ public class RelatorioValidadorResource {
 			           				String realPath  = req.getSession().getServletContext().getRealPath("/arquivos");
 			                	    unZip(file.getAbsolutePath(), realPath +"/"+folderUser);
 								}
-							
-	       		 	  }
-		    } 
+	       		 	    }
+				} 
 
-						
-			private boolean isZip(String name) {
-				String extension = name.substring(name.lastIndexOf(".") + 1, name.length());
-					if(extension.equals("zip")){
-						return true;
-					}
-				return false;
-			}
-					
-	
-			private void unZip(String zip, String folderStract){
-		         try {
-					ZipFile zipFile = new ZipFile(zip);
-					zipFile.extractAll(folderStract);
-					zipFile.getFile().delete();
-				} catch (ZipException e) {
-					e.printStackTrace();
-				}
-			 }
 			
-						 
-			private File streamToFile (HttpServletRequest req, FileItemStream item, String baseFolder) throws IOException {            
-				String realPath  = req.getSession().getServletContext().getRealPath("/" + baseFolder);
-			    File file = new File(realPath + "/" + item.getName());
-			   
-			    InputStream inputStream = item.openStream();
-	
-				    try (FileOutputStream out = new FileOutputStream(file)) {
-				        IOUtils.copy(inputStream, out);
-				        inputStream.close();
-				    }
-			    return file;            
-			}
+			
+			
+			
+						
+				private boolean isZip(String name) {
+					String extension = name.substring(name.lastIndexOf(".") + 1, name.length());
+						if(extension.equals("zip")){
+							return true;
+						}
+					return false;
+				}
+						
+		
+				private void unZip(String zip, String folderStract){
+			         try {
+						ZipFile zipFile = new ZipFile(zip);
+						zipFile.extractAll(folderStract);
+						zipFile.getFile().delete();
+					} catch (ZipException e) {
+						e.printStackTrace();
+					}
+				 }
+				
+		 					 
+				private File streamToFile (HttpServletRequest req, FileItemStream item, String baseFolder) throws IOException {            
+					String realPath  = req.getSession().getServletContext().getRealPath("/" + baseFolder);
+				    File file = new File(realPath + "/" + item.getName());
+				   
+				    InputStream inputStream = item.openStream();
+		
+					    try (FileOutputStream out = new FileOutputStream(file)) {
+					        IOUtils.copy(inputStream, out);
+					        inputStream.close();
+					    }
+				    return file;            
+				}
 
 }

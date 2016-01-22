@@ -22,11 +22,13 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import br.com.guarani.rta.dao.campo.CampoDAO;
 import br.com.guarani.rta.entidade.Campo;
+import br.com.guarani.rta.entidade.LinhaErro;
+import br.com.guarani.rta.entidade.TabelaErro;
 import br.com.guarani.rta.entidade.TabelasErros;
 import br.com.guarani.rta.validador.UtilsValidator;
 
 @Component
-public class TesteFile {
+public class TesteFile{
 	
 	
 	@Autowired
@@ -35,10 +37,15 @@ public class TesteFile {
 	@Autowired
     List<Campo> campos = null;
 
-    @Test
-	public List<TabelasErros> listaErros (File folder) throws IOException{
+    @SuppressWarnings("static-access")
+	@Test
+	public List<TabelaErro> listaErros (File folder) throws IOException
+    {
 
-    	List<TabelasErros> tabelasDeErros = new ArrayList<TabelasErros>();
+    	List<TabelaErro> tabelaErros = new ArrayList<TabelaErro>();
+    	
+    	List<LinhaErro> linhaErros = new ArrayList<LinhaErro>();
+    	
     	
 		int carga;
 		String nome;
@@ -54,55 +61,66 @@ public class TesteFile {
 		boolean iscnpj;
 		
 		int i;
+        int linha = 1;
+
+		TabelaErro tabelasErros = null;
 		
-		TabelasErros tabelasErros = null;
-	    
+	    LinhaErro linhaErro = null;
+		
 		UtilsValidator utils = null;
 			
-		 for (final File fileEntry : folder.listFiles()) {
-			 
-		        if (fileEntry.isFile()) {		        	
-
-        	    	tabelasErros = new TabelasErros();
-
+		 for (File fileEntry : folder.listFiles())
+		 {
+			  
+		        if (fileEntry.isFile()) 
+		        {		        	
+		        	
+		        	linha = 1;
+		        	
 		        	String basename = FilenameUtils.getBaseName(fileEntry.toString());
-		        
+		        	
+		        	tabelasErros = new TabelaErro(basename);
+
 		        	campos = campodao.porNomeTabela(basename);
 		        	
 		        	List<String> dados;
 		        	 
 		        	BufferedReader in = null;
-		        	try {
-		        	    in = new BufferedReader(new FileReader(fileEntry));
+		        	
+		        	try 
+		        	{
+		        	    
+		        		in = new BufferedReader(new FileReader(fileEntry));
 		        	    String read = null;
 		        	  
-		        	    while ((read = in.readLine()) != null) {
-		        	    	
-				    	    
+		        	    while ((read = in.readLine()) != null)
+		        	    {
 				        	utils = new UtilsValidator();
 		        	        
 		        	        dados = UtilsValidator.checaCaractere(read, "|",200);	
 		        	        
-		        	        //Comparar quantidade de campos com o do banco
 		        	        
-		        	        if(dados.size() != campos.size()){
-		        				System.out.println("Preencha todos os campos");
+		        	        if(dados.size() != campos.size())
+		        	        {
+		        				System.out.println("Preencha Todos os Campos");
 		        	        	break;
 		        	        }
 		        	        
-		        	        if(dados.size() == 0){
+		        	        if(dados.size() == 0)
+		        	        {
 		        				System.out.println("Linha em Branco");
 		        	        	break;
 		        	        }
 		        	        
 		        	        System.out.println(dados.toString());
 		        	        
-		        	        for(i = 0; i<= dados.size(); i++){
-		        	        	
-		        	    	Iterator<Campo> it = campos.iterator();
+		        	        for(i = 0; i<= dados.size(); i++)
+		        	        {
+
+		        	        Iterator<Campo> it = campos.iterator();
 		        	    	
-		    	    	    		while (it.hasNext()){
-		    	    	    			
+		    	    	    		while (it.hasNext())
+		    	    	    		{
 		    	    	    			    Campo campo = it.next();     
 						         			cprimaria = campo.getCprimaria();
 						         			tam = campo.getTam();
@@ -116,20 +134,27 @@ public class TesteFile {
 						         			utils.validaAtributos(campo, dados.get(i));
 						         			
 						         			utils.verifyIsNull(dados.get(i), nulo);
-						         		i++;
+						         			
+						         			i++;
 		    	    	    		}
 		        	           }
-					            
-		        	        tabelasDeErros.add(utils.getTabelasErro());
+		        	    	
+							linhaErro = new LinhaErro(linha ++, utils.getRegistros());
+		        	        tabelasErros.getLinhas().add(linhaErro);
 		        	    } 
-		        	}catch(Exception e){
+		        	  		        	   
+		        	}
+		        	catch(Exception e)
+		        	{
 		        		e.printStackTrace();
 		        	}	        	
-		        	finally{
+		        	finally
+		        	{
 		        		in.close();
+		        	}		        	
+			        tabelaErros.add(tabelasErros);
 		        	}
-		       }
 		  }
-		return tabelasDeErros;
-	}    
+		 return tabelaErros;
+	}
 }
