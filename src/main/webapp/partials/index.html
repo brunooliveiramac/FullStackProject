@@ -1,0 +1,75 @@
+
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Projetos</title>
+
+        <!-- CSS -->
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+ 
+      
+</head>
+		 <div class="container">
+		 <li style="margin-top: 10px">
+			<div class="pull-right" >
+				<a href="#!/create" class="btn btn-default" ng-show="hasRole('admin')" title="Create"><span class="fa fa-plus"></span></a>
+			</div>
+	     </li>
+			<div class="page-header">
+				<h3>Projetos</h3>
+			</div>
+			
+			<input ng-model="filter" style="margin-top: 20px; margin-bottom: 20px;" class="form-control" placeholder="Filter">
+			
+			<p ng-show="mensagem.length" class="alert alert-info">{{mensagem}}</p>  <!-- Se tem Mesagem definida no controller, exibe, se nao, null -->
+			<table class="table table-bordered table-striped tree-grid">
+					
+					
+					<div class="list-group">
+				         <a href="#"
+				            class="list-group-item"
+				            ng-repeat="projeto in projetos | filter:filter"
+				            context-menu="menuOptions">
+				             {{projeto.gua_pro_nome}}
+				        </a>				        
+   					 </div> 
+					
+					<div class="pallet" ng-show="wait"> 
+								<div class="palletLoading">
+								<img width="25px" height="25px" src="images/loader.gif"/>
+					</div>
+			
+			</div>
+			
+				    
+			</table>
+			
+		
+			
+		</div>
+
+					<!-- 
+					<div ng-repeat="projeto in projetos | filter:filter" context-menu="menuOptions">
+					<div class="pull-right"> 
+						<a href="#!/ver/{{projeto.gua_pro_id}}" class="btn btn-xs btn-default" ng-show="hasRole('user')" title="Ver"><span class="glyphicon glyphicon-open-file"></span></a>		
+						<a href="#!/edit/{{projeto.gua_pro_id}}" class="btn btn-xs btn-default" ng-show="hasRole('admin')" title="Editar"><span class="fa fa-pencil"></span></a>		
+						<a href="" ng-click="remover(projeto)" class="btn btn-xs btn-default" ng-show="hasRole('admin')" title="Deletar"><span class="fa fa-trash-o"></span></a>
+					</div>
+					<p>{{projeto.gua_pro_nome}}</p>
+				    </div>
+					-->
+		
+			<!-- <div class="list-group">
+				         <a href="#"
+				            class="list-group-item"
+				            ng-repeat="projeto in projetos"
+				            context-menu="menuOptions">
+				             {{projeto.gua_pro_nome}}
+				        </a>
+   					 </div>
+		     -->	   
+
+	
+
+ 

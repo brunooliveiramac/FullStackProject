@@ -1,0 +1,83 @@
+
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+<!--    <link rel="stylesheet" href="css/menuleft.css">
+ -->        
+ 		<link rel="stylesheet" href="css/validador.css">
+        
+   		<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+        <title>Validador</title>
+
+        <!-- CSS -->
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+ 
+      
+</head>
+
+ <div class="container">
+			
+			
+			<div class="page-header">
+				<h3>Validador</h3>
+			</div>
+			
+			<body ng-controller="ValidadorController">
+				  <h4>Upload</h4>
+				  <button ngf-select="uploadFiles($files, $invalidFiles)" multiple
+				          accept="image/*" ngf-max-height="1000" ngf-max-size="1MB">
+				      Selecione</button>
+				  <br><br>
+				 <h4>Arquivos:</h4>
+				  <ul>
+				    <li ng-repeat="f in files" style="font:smaller">{{f.name}} {{f.$errorParam}}
+				      <span class="progress" ng-show="f.progress >= 0">
+				        <div style="width:{{f.progress}}%"  
+				            ng-bind="f.progress + '%'"></div>
+				      </span>
+				    </li>
+				    <li ng-repeat="f in errFiles" style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
+				    </li> 
+				  </ul>
+				 <!--  {{errorMsg}} -->
+			</body>
+			
+			
+			<h5>Relatório</h5>
+			
+			<div ng-repeat="tabelaserro in tabelaserros">
+					<h5>{{tabelaserro.nome_tabela}}</h5>
+						<div ng-repeat="erro  in tabelaserro.erros">
+							<p style="padding:1px;">
+							 <strong>Campo:</strong> {{erro.campo_nome}} <strong>Comentário:</strong>{{erro.comentario_erro}} 
+							</p>
+					 					 
+						</div>
+						
+			
+			</div>
+			
+</div>
+
+
+<!-- <div id='cssmenu'>
+		<ul>
+		   <li><a href='#'><span>Exemplo</span></a></li>
+		   <li class='active has-sub'><a href='#'><span>APK</span></a>
+		      <ul>
+		         <li class='has-sub'><a href='#'><span>APK</span></a>
+		         </li>
+		         <li class='has-sub'><a href='#'><span>Exemplo</span></a>
+		         </li>
+		      </ul>
+		   </li>
+		   <li><a href='#'><span>Exemplo</span></a></li>
+		   <li class='last'><a href='#'><span>Exemplo</span></a></li>
+		</ul>
+</div>
+		 -->
+		
+		
+
+ 

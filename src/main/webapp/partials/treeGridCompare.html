@@ -1,0 +1,131 @@
+	<head>
+	
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Login</title>
+        <!-- CSS -->
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500"> 
+        <link rel="stylesheet" href="css/treeGrid.css">    
+       
+       <!--  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"> -->
+        
+     
+	</head>
+	
+	<div class="container title">
+	<h2>Compare</h2>
+	</div>
+	 
+  	<div class="container compare">
+  			<div style="width: 100%;">
+  				
+  				 <div style="float:left; width: 50%; padding: 4px;" >
+					  <body ng-controller="treeGridControllerCompare">
+						
+							<div class="page-header">
+							</div>
+							
+								<!-- Caixa de Seleção -->
+							    <div class="form-group versao">
+								        		<label>Versão: {{versao}}</label> 
+								        	
+							 	 </div>
+							
+					
+							    <div ng-model="showMinDir" ng-value="false" >
+							        <!--
+							        <button ng-click="showMinDir=false" class="btn btn-primary btn-sm">Standard directive</button>
+							        <button ng-click="showMinDir=true" class="btn btn-primary btn-sm">Minimum directive</button>
+							        <br/><br/>
+							        --> 
+							        <div ng-show="!showMinDir" main" style="height:100%; margin-bottom:5px;"> 
+							           <!-- <strong>standard directive: </strong><code>&lt;tree-grid tree-data="tree_data" tree-control="my_tree" col-defs="col_defs" expand-on="expanding_property" on-select="my_tree_handler(branch)" expand-level="2" icon-leaf= "glyphicon glyphicon-file"&gt;&lt;/tree-grid&gt;</code>
+							             -->
+							            <button ng-click="my_tree.expand_all()" class="btn btn-default btn-sm" style="height:100%; margin-bottom:20px;">Expandir</button>
+							            <button ng-click="my_tree.collapse_all()" class="btn btn-default btn-sm" style="height:100%; margin-bottom:20px;">Fechar </button>
+									
+										<input class="form-control" type="text" data-ng-model="filterString" placeholder="Filter"  />
+		            
+		          					    <tree-grid tree-data="tree_data" tree-control="my_tree" col-defs="col_defs" expand-on="expanding_property" on-select="my_tree_handler(branch)" on-click="grid(branch.id)" expand-level="2" icon-leaf= "glyphicon glyphicon-file"></tree-grid>
+							 		
+							 		</div>
+							 
+							        <div ng-show="showMinDir"> 
+							            <!--
+							            <strong>bare minimum directive:</strong> <code>&lt;tree-grid tree-data="tree_data"&gt;&lt;/tree-grid&gt;</code>
+							            -->
+							
+							        </div> 
+							    </div>
+							    
+					  </body>
+			   </div>
+		</div>
+		
+		
+		
+		<div style="float:right; width: 50%;  padding: 4px">
+ 					 <body ng-controller="treeGridControllerCompareDestino">
+						
+							<div class="page-header">
+							<h3></h3>
+							</div>
+							
+								<!-- Caixa de Seleção -->
+							    <div class="form-group">
+								        		<label>Versão:</label> 
+								        		<select
+								        		name="layout" class="form-control" 
+								        		ng-model="layout"
+								        		ng-change="updateTables()"
+								        		ng-controller="treeGridControllerCompareDestino" 
+								        		ng-options="layout.gua_lay_num_ver as (layout.gua_lay_notas) for layout in layouts">
+								        		<option value="">Selecione a Versão do Compare</option>
+								        		</select> 
+							 	 </div>
+							
+			<div ng-controller="treeGridControllerCompareDestino">
+					
+							    <div ng-model="showMinDir" ng-value="false" >
+							        <!--
+							        <button ng-click="showMinDir=false" class="btn btn-primary btn-sm">Standard directive</button>
+							        <button ng-click="showMinDir=true" class="btn btn-primary btn-sm">Minimum directive</button>
+							        <br/><br/>
+							        --> 
+							        <div ng-show="!showMinDir" main" style="height:100%; margin-bottom:20px;"> 
+							           <!-- <strong>standard directive: </strong><code>&lt;tree-grid tree-data="tree_data" tree-control="my_tree" col-defs="col_defs" expand-on="expanding_property" on-select="my_tree_handler(branch)" expand-level="2" icon-leaf= "glyphicon glyphicon-file"&gt;&lt;/tree-grid&gt;</code>
+							             -->
+							            <button ng-click="my_tree.expand_all()" class="btn btn-default btn-sm" style="height:100%; margin-bottom:20px;">Expandir</button>
+							            <button ng-click="my_tree.collapse_all()" class="btn btn-default btn-sm" style="height:100%; margin-bottom:20px;">Fechar </button>
+							          
+							            <div class="pull-right" >
+							          	  <button ng-click="setVersaoCompare()" class="btn btn-default btn-sm" style="height:100%; margin-bottom:20px;">Compare</button>
+							            </div>
+							           
+							            <input class="form-control" type="text" data-ng-model="filterString" placeholder="Filter"  />
+		            						
+		           						 <tree-grid tree-data="tree_data" tree-control="my_tree" col-defs="col_defs" expand-on="expanding_property" on-select="my_tree_handler(branch)" on-click="grid(branch.id)" expand-level="2" icon-leaf= "glyphicon glyphicon-file"></tree-grid>
+				           							 
+				           							 <div class="pallet" ng-show="wait"> 
+														<div class="palletLoading">
+														<img width="25px" height="25px" src="images/loader.gif"/>
+													 </div>
+													 
+							            </div>
+							        </div>
+							 
+							        <div ng-show="showMinDir"> 
+							            <!--
+							            <strong>bare minimum directive:</strong> <code>&lt;tree-grid tree-data="tree_data"&gt;&lt;/tree-grid&gt;</code>
+							            -->
+							
+							        </div> 
+							    </div>
+							    
+					  </body>  		
+			 </div>
+  		 <div style="clear:both"></div>
+  		 
+		  
+  </div>

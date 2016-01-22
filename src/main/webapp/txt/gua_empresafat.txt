@@ -1,0 +1,3 @@
+0011232331221|Nome Empresa|SP|empresa@emailsincronizador|Padrão|02|(14)99449-90012339|
+2121011232331221|Nome Empresa|SP|empresa@emailsincronizador|Padrão|02|(14)99449-90012339|
+
