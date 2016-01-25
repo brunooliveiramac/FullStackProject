@@ -45,12 +45,12 @@ public class TabelaTeste {
 		List<Tabela> list = tabelaDao.getTableByVersion(1);
 		System.out.println("TABELA: " + list);
 
-	}*/
+	}*/ 
 	
 	@Test
 	public void tabelaListComparer(){
-		List<Tabela> list = tabelaDao.getTableByVersion(1);
-		System.out.println("TABELA: " + list);
+		List<String> list = tabelaDao.getTablesName();
+		System.out.println("TABELA: " + list.toString());
 		System.out.println("TABELA: " + list);
 		System.out.println("TABELA: " + list);
 		System.out.println("TABELA: " + list);

@@ -34,14 +34,6 @@ public class TabelaDAOimpl extends JpaDao<Tabela, Long> implements TabelaDAO {
 		super(Tabela.class); 
 	}
 	
-	/*@SuppressWarnings("unchecked")
-	@Override  
-	@Transactional
-	public List<Tabela> getTableByVersion(int versao) {
-		Query consult = this.getEntityManager().createQuery("SELECT t FROM Tabela t JOIN FETCH t.layout as versao WHERE versao.gua_lay_num_ver <= :versao");
-		 return consult.setParameter("versao", versao).getResultList();
-	}*/
-	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Tabela> getTableByVersion(int idprojeto) {
@@ -95,21 +87,13 @@ public class TabelaDAOimpl extends JpaDao<Tabela, Long> implements TabelaDAO {
 				 .setParameter("versaoDestino", versaoDestino)
 				 .setParameter("idprojeto", idprojeto) 
 				 .getResultList();
-	}  
+	}
 
-	
-/*	@SuppressWarnings("unchecked")
-	@Override   
-	@Transactional
-	public List<Tabela> getTableByVersionIdTab(int versao, int id) {
-		Query consult = this.getEntityManager().createQuery("SELECT distinct t FROM Tabela t  JOIN FETCH t.layout as versao JOIN FETCH t.children c WHERE versao.gua_lay_num_ver <= :versao AND c.layout.gua_lay_num_ver <= :versao AND t.id = :id JOIN FETCH (SELECT c FROM Campo c LEFT JOIN c.campo camp WHERE c.id = c.campo.id)");
-		consult.setParameter("versao", versao);
-		consult.setParameter("id", id);
-		List<Tabela> tabela = (List<Tabela>) consult.getResultList();
-		return tabela; 
-	}*/
-	
-
-
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<String> getTablesName() {
+		Query consult = this.getEntityManager().createQuery("SELECT t.nomef FROM Tabela t");
+		 return consult.getResultList();
+	}    
 
 }

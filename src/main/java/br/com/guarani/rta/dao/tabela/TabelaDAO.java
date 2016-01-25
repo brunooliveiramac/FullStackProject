@@ -34,5 +34,7 @@ public interface TabelaDAO extends Dao<Tabela, Long> {
 	public List<Tabela> getTablesByVersionIdBetween(int versaoOrigem, int versaoDestino, int idprojeto);
 	
 	public List<Tabela> getTablesWithChange(int versaoOrigem, int versaoDestino, int idprojeto);
+	
+	public List<String> getTablesName();
 
 }

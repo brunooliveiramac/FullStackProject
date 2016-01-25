@@ -85,7 +85,6 @@ public class RelatorioValidadorResource {
 			@Consumes(MediaType.MULTIPART_FORM_DATA)
 		    @Path("/upload")
 		    public void listValid(@Context HttpServletRequest req, @Context ServletContext ct) throws IOException, FileUploadException {
-						
 				if(folderUser == null){		
 					folderUser = RandomStringUtils.randomAlphabetic(10);			
 				    File folder = new File(ct.getRealPath("/arquivos/" + folderUser));
@@ -94,20 +93,15 @@ public class RelatorioValidadorResource {
 				
 				ServletFileUpload fileUpload = new ServletFileUpload();
 				FileItemIterator iterator = fileUpload.getItemIterator(req);
-				 
 				while (iterator.hasNext()) {	
-					
 	                   FileItemStream item = iterator.next();
 	                   File file = streamToFile(req, item, "arquivos/" + folderUser);   				   
-			                
 	                   			if(isZip(file.getName())){
 			           				String realPath  = req.getSession().getServletContext().getRealPath("/arquivos");
 			                	    unZip(file.getAbsolutePath(), realPath +"/"+folderUser);
 								}
 	       		 	    }
 				} 
-
-			
 			
 			
 			
@@ -135,9 +129,7 @@ public class RelatorioValidadorResource {
 				private File streamToFile (HttpServletRequest req, FileItemStream item, String baseFolder) throws IOException {            
 					String realPath  = req.getSession().getServletContext().getRealPath("/" + baseFolder);
 				    File file = new File(realPath + "/" + item.getName());
-				   
-				    InputStream inputStream = item.openStream();
-		
+				    InputStream inputStream = item.openStream();		
 					    try (FileOutputStream out = new FileOutputStream(file)) {
 					        IOUtils.copy(inputStream, out);
 					        inputStream.close();

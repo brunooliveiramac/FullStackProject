@@ -15,11 +15,8 @@ public class LinhaErro implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	private Integer num_linha;
-
-	private List<Registros> erros;
-
-	
-	
+	private String msg_linha;
+	private List<Registros> erros;	
 	
 	public LinhaErro(Integer num_linha, List<Registros> erros) {
 		this.num_linha = num_linha;
@@ -28,6 +25,12 @@ public class LinhaErro implements Serializable{
 
 	public LinhaErro() {
 		// TODO Auto-generated constructor stub
+	}
+
+
+	public LinhaErro(Integer num_linha, String msg_linha) {
+		this.num_linha = num_linha;
+		this.msg_linha = msg_linha;
 	}
 
 	public Integer getNum_linha() {
@@ -46,7 +49,13 @@ public class LinhaErro implements Serializable{
 		this.erros = erros;
 	}
 	
+	public String getMsg_linha() {
+		return msg_linha;
+	}
 	
+	public void setMsg_linha(String msg_linha) {
+		this.msg_linha = msg_linha;
+	}
 	
 
 }

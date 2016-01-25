@@ -17,6 +17,7 @@ public class Registros implements Serializable{
 	private String conteudo_campo;
 	private String valor_esperado;
 	private String comentario_erro;
+
 	
 	public Registros() {
 	}
@@ -77,6 +78,8 @@ public class Registros implements Serializable{
 	public void setValor_esperado(String valor_esperado) {
 		this.valor_esperado = valor_esperado;
 	}
+	
+	
 	
 	
 	@Override

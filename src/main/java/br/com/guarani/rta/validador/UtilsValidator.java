@@ -20,9 +20,9 @@ import br.com.guarani.rta.entidade.TabelasErros;
 public class UtilsValidator {
 	
 	
-	public Registros registro;
+	public static Registros registro;
 	
-	public List<Registros> registros;
+	public static List<Registros> registros;
 	
 	public UtilsValidator(){
 		registro = new Registros();
@@ -30,13 +30,14 @@ public class UtilsValidator {
 	}
 	
 	
-	public boolean verifyIsNull(String part, String nulo){
+	public boolean verifyIsNull(Campo campo, String part, String nulo){
 		if(nulo.contains("Não")){
 				if(part != null && !part.isEmpty()) {
 					return true;
 				}else{ 
-					System.out.println("Campo Obrigatório! Preencha!");
-					return false;
+					registro = new Registros(campo.getNomef(), part, "Não Nulo.", " Campo não pode ser nulo.");
+				    registros.add(registro);	
+				 return false;
 				}	
 			}
 		 else
@@ -64,24 +65,19 @@ public class UtilsValidator {
 		if(tamBd <= tamCarga) {
 			return true;
 		} 
-		
 		else
-		
-			registro = new Registros(campo.getNomef(), part, "Valor esperado: "+tamBd.toString() , " Tamanho do campo incorreto.");
-		    registros.add(registro);
-		
+			registro = new Registros(campo.getNomef(), part, "Tam Max:"+tamBd.toString() , " Tamanho do campo incorreto.");
+		    registros.add(registro);		
 		return false;
 	}
-	
 	
 	public static  boolean isTelefone(String numeroTelefone, String camponome) {
         if( numeroTelefone.matches(".((10)|([1-9][1-9]).)\\s9?[6-9][0-9]{3}-[0-9]{4}") ||
                 numeroTelefone.matches(".((10)|([1-9][1-9]).)\\s[2-5][0-9]{3}-[0-9]{4}"))
         	return true;
         else
-        
-     
-        
+        	registro = new Registros(camponome, numeroTelefone, "(XX) XXXX-XXXX / (XX) XXXXX-XXXX", " Formato Telefone inválido");
+        	registros.add(registro);
         return false;
     }
 	
@@ -106,9 +102,6 @@ public class UtilsValidator {
 		}
 	}
 	
-	/*
-	 * This will take care of valid formats and valid dates. It will not validate the correct days of the month i.e. leap year.
-	 */
 	
 	public static boolean isDate(String date){
 		if(date.matches("^((19|20)\\d\\d)/(0?[1-9]|1[012])/(0?[1-9]|[12][0-9]|3[01])$")){
@@ -174,9 +167,7 @@ public class UtilsValidator {
 		}
 	
 	}
-	
-	
-	
+		
 	
 	
 	public static List<String> checaCaractere(String part, String caractere, Integer tamMax) {
@@ -209,9 +200,6 @@ public class UtilsValidator {
 	   
 	   return campos;
 	}
-
-
-	
 
 
 	public Registros getRegistro() {
