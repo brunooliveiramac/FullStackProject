@@ -111,5 +111,13 @@ public class TabelaErro implements Serializable {
 	}
 	
 	
+	public Integer getCont_total_mask_telefone() {
+		return cont_total_mask_telefone;
+	}
+	
+	public void setCont_total_mask_telefone(Integer cont_total_mask_telefone) {
+		this.cont_total_mask_telefone = cont_total_mask_telefone;
+	}
+	
 	
 }

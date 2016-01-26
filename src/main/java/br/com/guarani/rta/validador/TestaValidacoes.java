@@ -2,6 +2,12 @@ package br.com.guarani.rta.validador;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.lang3.StringUtils;
 
 public class TestaValidacoes {
 	
@@ -93,11 +99,46 @@ public class TestaValidacoes {
 			return false;
 	}
 	
+	@SuppressWarnings("static-access")
+	public static boolean isEmbalagem(String campo_entrada){
+			String regex = "^(([\\w]{1,6})([;])([0-9]{1,3})([;])([0-9]{1,3})([;])([0-9]{1,3})([;])([@])\\s*)+$";
+			/*  D,Q,QM,QMI,@
+			  	D = Descrição (máximo 6 caracteres);
+				Q = Quantidade;
+				QM = Quantidade múltipla;
+				QMI = Quantidade mínima;
+				@ = Separador de embalagem
+			 */    
+			if(campo_entrada.matches(regex)){
+				System.out.println("Válido");
+				return true;
+			}
+			System.out.println("Inválido");
+			return false;		
+	} 
 	
-	
-	public static void main(String[] args) {
-	
-			isZip("txt.zip");
-		
+	public static boolean isFrete(String campo){
+		List<String> dados = new ArrayList<>();
+		dados.add("C");
+		dados.add("F");
+		dados.add("S");
+		if(dados.contains(campo)){
+			return true;
+		}
+		else
+			return false;		
 	}
+	
+	public static boolean SN(String campo){
+		if(campo.equals("S") || campo.equals("N"))
+		return true;
+		else
+		return false;
+	}
+	
+	 public static void main(String[] args) {
+	
+		 	isFrete("C");
+		 
+	 }
 }

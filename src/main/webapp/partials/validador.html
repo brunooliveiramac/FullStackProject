@@ -51,7 +51,7 @@
 						<tr>
 			   					<td>Total de erros</td>
 			   					<div class="pull-right">
-				   					<td>{{linha.erros.length}}</td>
+				   					<td>{{tabelaserro.linhas.lenght}}</td>
 				   				</div>
 		   				</tr>
 		   				<tr>
@@ -69,20 +69,17 @@
 				 
 					<span ng-repeat="incorretas in tabelaserro.tabelas_nome_incorreto track by $index">Nome da tabela incorreto: {{incorretas}}&nbsp;</span>
 				 		 	
-					<h5>{{tabelaserro.nome_tabela}}  {{tabelaserro.msg}}</h5>
+					<h3>{{tabelaserro.nome_tabela}}  {{tabelaserro.msg}}</h3>
  
 						<div ng-repeat="linha in tabelaserro.linhas">
 							 <strong style="margin-left:10px;">Linha:</strong> {{linha.num_linha}} {{linha.msg_linha}}
 								
 								<h5 ng-show="linha == null">Campos válidos!</h5>
-								
+								 
 								<div ng-repeat="erro in linha.erros">
 									<strong style="margin-left:20px">Campo:</strong> {{erro.campo_nome}} <strong> Conteúdo: </strong> {{erro.conteudo_campo}}<strong> Conteúdo esperado: </strong> {{erro.valor_esperado}} <strong> Comentário:</strong>{{erro.comentario_erro}} 
 						 		</div> 
-					 		
-						</div> 
-						
-			
+						</div> 			
 			</div>
 			
 			

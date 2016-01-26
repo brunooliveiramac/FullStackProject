@@ -1,5 +1,6 @@
 package br.com.guarani.rta.validador;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -9,6 +10,7 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
+import org.apache.commons.lang3.StringUtils;
 
 import br.com.guarani.rta.entidade.Campo;
 import br.com.guarani.rta.entidade.LinhaErro;
@@ -19,6 +21,8 @@ import br.com.guarani.rta.entidade.TabelasErros;
 
 public class UtilsValidator {
 	
+	public static int telefone_mask = 0;
+	public static int data_mask = 0;
 	
 	public static Registros registro;
 	
@@ -35,7 +39,7 @@ public class UtilsValidator {
 				if(part != null && !part.isEmpty()) {
 					return true;
 				}else{ 
-					registro = new Registros(campo.getNomef(), part, "Não Nulo.", " Campo não pode ser nulo.");
+					registro = new Registros(campo.getNomef(), "Nulo.", "Não Nulo.", " Campo não pode ser nulo.");
 				    registros.add(registro);	
 				 return false;
 				}	
@@ -61,84 +65,122 @@ public class UtilsValidator {
 	
 	}	
 	
-	public  boolean verificaTamanho(String basename, Campo campo, Integer tamBd, int tamCarga, String part) throws IOException{
-		if(tamBd <= tamCarga) {
+	public  boolean verificaTamanho(String basename, Campo campo, Integer tamBd, Integer tamCarga, String part) throws IOException{
+		if(tamCarga == 0 || tamCarga.SIZE == 0 || tamCarga.equals(null)){
 			return true;
-		} 
+		}
+		if(tamBd >= tamCarga || tamCarga == 0) {
+			return true;
+		}  
 		else
 			registro = new Registros(campo.getNomef(), part, "Tam Max:"+tamBd.toString() , " Tamanho do campo incorreto.");
-		    registros.add(registro);		
+		    registros.add(registro);	
+		    
 		return false;
 	}
 	
 	public static  boolean isTelefone(String numeroTelefone, String camponome) {
-        if( numeroTelefone.matches(".((10)|([1-9][1-9]).)\\s9?[6-9][0-9]{3}-[0-9]{4}") ||
+        if(numeroTelefone == null || numeroTelefone.matches(".((10)|([1-9][1-9]).)\\s9?[6-9][0-9]{3}-[0-9]{4}") ||
                 numeroTelefone.matches(".((10)|([1-9][1-9]).)\\s[2-5][0-9]{3}-[0-9]{4}"))
         	return true;
         else
         	registro = new Registros(camponome, numeroTelefone, "(XX) XXXX-XXXX / (XX) XXXXX-XXXX", " Formato Telefone inválido");
         	registros.add(registro);
+        	telefone_mask ++;
+        	
         return false;
     }
 	
 	
-	public static  boolean isCep(String cep){
+	public static  boolean isCep(String cep, String campo){
 		if(cep.matches("\\d{5}-\\d{3}")){
 			return true;
 		}
 		else{
+			registro = new Registros(campo, cep, "XX.XXX-XXX", " Formato CEP inválido");
+        	registros.add(registro);
 			return false;
 		}
 	}
 	
 	
 	
-	public static  boolean isCnpj(String c){
-		if(c.matches("^([0-9]{2}[.]?[0-9]{3}[.]?[0-9]{3}[/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[.]?[0-9]{3}[.]?[0-9]{3}[-]?[0-9]{2})$")){
+	public static  boolean isCnpj(String cnpj, String campo){
+		if(cnpj.matches("^([0-9]{2}[.]?[0-9]{3}[.]?[0-9]{3}[/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[.]?[0-9]{3}[.]?[0-9]{3}[-]?[0-9]{2})$")){
 		 	return true;
 		}
 		else{
+			registro = new Registros(campo, cnpj, "XX.XXX.XXX/YYYY-ZZ", " Formato CNPJ inválido");
+        	registros.add(registro);
 			return false;
 		}
 	}
 	
 	
-	public static boolean isDate(String date){
+	public static boolean isDate(String date, String campo){
 		if(date.matches("^((19|20)\\d\\d)/(0?[1-9]|1[012])/(0?[1-9]|[12][0-9]|3[01])$")){
 			return true;
 		}else{
-			System.out.println("Invalido");
+			registro = new Registros(campo, date, "YYYY/MM/DD", " Formato Data inválido");
+        	registros.add(registro);
+        	data_mask ++;
 			return false;
 		}
 	}
 	
 	
 	
-	public static boolean isCpf(String c){
-		if(c.matches("^([0-9]{2}[.]?[0-9]{3}[.]?[0-9]{3}[/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[.]?[0-9]{3}[.]?[0-9]{3}[-]?[0-9]{2})$")){
+	public static boolean isCpf(String cpf, String campo){
+		if(cpf.matches("^([0-9]{2}[.]?[0-9]{3}[.]?[0-9]{3}[/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[.]?[0-9]{3}[.]?[0-9]{3}[-]?[0-9]{2})$")){
 		 	return true;
 		}
 		else{
+			registro = new Registros(campo, cpf, "XXX.XXX.XXX-XX", " Formato CPF inválido");
+        	registros.add(registro);
 			return false;
 		}
 	}
 	
+	@SuppressWarnings("static-access")
+	public static boolean isEmbalagem(String embalagem, String campo){
+			String regex = "^(([\\w]{1,6})([;])([0-9]{1,3})([;])([0-9]{1,3})([;])([0-9]{1,3})([;])([@])\\s*)+$";
+			/*  D,Q,QM,QMI,@
+			  	D = Descrição (máximo 6 caracteres);
+				Q = Quantidade;
+				QM = Quantidade múltipla;
+				QMI = Quantidade mínima;
+				@ = Separador de embalagem
+			 */    
+			if(embalagem.matches(regex)){
+				return true; 
+			} 
+			registro = new Registros(campo, embalagem, "D,Q,QM,QMI,@", "Dados embalagem incorretos");
+        	registros.add(registro);
+			return false;
+	} 
 	
-	
-
-	public int sizeListEnter(File file) throws IOException{
-	    LineIterator iteratorline = FileUtils.lineIterator(file);
-	    int count = 0;
-	            while (iteratorline.hasNext()) {
-	            		String[] line = iteratorline.nextLine().split("\\|");
-			            for (int i = 0; i<line.length; i++) {
-			            	count ++;
-			            }
-			            System.out.println(count);
-	            }
-		return count;
+	public static boolean isFrete(String frete, String campo){
+		List<String> dados = new ArrayList<>();
+		dados.add("C");
+		dados.add("F");
+		dados.add("S");
+		if(dados.contains(frete)){
+			return true;
+		}
+		else
+		registro = new Registros(campo, frete, "C - F - S", "Dados inválidos");
+    	registros.add(registro);
+		return false;		
 	}
 	
+	public static boolean SN(String sn, String campo){
+		if(campo.equals("S") || campo.equals("N"))
+		return true;
+		else 
+		registro = new Registros(campo, sn, "S ou N", "Dados inválidos");
+    	registros.add(registro);
+		return false;
+	}
 	
 	public static void validaAtributos(Campo campo, String part){
 		int atributo;
@@ -150,18 +192,27 @@ public class UtilsValidator {
 					UtilsValidator.isTelefone(part, campo.getNomef());
 				}
 				if(atributo == 2){
-					UtilsValidator.isCnpj(part);
+					UtilsValidator.isCnpj(part, campo.getNomef());
 				}
 				if(atributo == 3){
-					UtilsValidator.isCpf(part);
+					UtilsValidator.isCpf(part, campo.getNomef());
 				}
 				if(atributo == 4){
-					UtilsValidator.isDate(part);
+					UtilsValidator.isDate(part, campo.getNomef());
 				}
-				if(atributo == 5){
-					UtilsValidator.isCep(part);
+				if(atributo == 5){ 
+					UtilsValidator.isCep(part, campo.getNomef());
+				}
+				if(atributo == 6){
+					UtilsValidator.isEmbalagem(part, campo.getNomef());
+					
+				}if(atributo == 7){
+					UtilsValidator.isFrete(part, campo.getNomef());
+				}if(atributo == 8){
+					UtilsValidator.SN(part, campo.getNomef());
 				}
 			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -171,11 +222,7 @@ public class UtilsValidator {
 	
 	
 	public static List<String> checaCaractere(String part, String caractere, Integer tamMax) {
-		
-		if(part.length() == 0){
-			System.out.println("Linha em Branco");
-		}
-		
+
 		String novalinha = "";
 		
 	    novalinha = novalinha + part;
@@ -221,5 +268,8 @@ public class UtilsValidator {
 		this.registros = registros;
 	}
 	
+	public int getTelefone_mask() {
+		return telefone_mask;
+	}
 
 }

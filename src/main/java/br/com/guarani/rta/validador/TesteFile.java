@@ -121,7 +121,7 @@ public class TesteFile{
         	    		tabelasErros.setNome_tabela(null);
 		        		tabelaErros.add(tabelasErros);
         	            break loop;
-        	    	}
+        	    	} 
 
 		        	campos = campodao.porNomeTabela(basename);
 		        	List<String> dados;
@@ -139,9 +139,7 @@ public class TesteFile{
 				        	utils = new UtilsValidator();
 		        	        
 		        	        dados = UtilsValidator.checaCaractere(read, "|",200);	
-		        	         
-					        	      
-					        	        
+		        	         					        	        
 		        	        looplinha:
 		        	        for(i = 0; i<= dados.size(); i++)
 		        	        {
@@ -152,9 +150,16 @@ public class TesteFile{
 		    	    	    			
 				    	    	    			 if(dados.size() != campos.size() && dados.size() != 0)
 								        	        {
-								        	        	linhaErro = new LinhaErro(linha ++, " com indice incorreto.");
-									        	        tabelasErros.getLinhas().add(linhaErro);
-									        	        break looplinha;
+				    	    	    				 	if(dados.size() < campos.size()){
+				    	    	    				 		linhaErro = new LinhaErro(linha ++, " com indice incorreto. Faltando dados na linha.");
+										        	        tabelasErros.getLinhas().add(linhaErro);
+										        	        break looplinha;	
+				    	    	    				 	}else{
+				    	    	    				 		linhaErro = new LinhaErro(linha ++, " com indice incorreto. Dados acima do esperado.");
+										        	        tabelasErros.getLinhas().add(linhaErro);
+										        	        break looplinha;	
+				    	    	    				 	}
+								        	        	
 								        	        }
 				    	    	    			 
 				    	    	    			  if(dados.size() == 0)
