@@ -182,6 +182,11 @@ public class UtilsValidator {
 		return false;
 	}
 	
+	private static boolean isSeparadoPorVirgula(String part, String nomef) {
+		
+	}
+	
+	
 	public static void validaAtributos(Campo campo, String part){
 		int atributo;
 		try {
@@ -208,19 +213,24 @@ public class UtilsValidator {
 					
 				}if(atributo == 7){
 					UtilsValidator.isFrete(part, campo.getNomef());
+					
 				}if(atributo == 8){
 					UtilsValidator.SN(part, campo.getNomef());
+					
+				}if(atributo == 9){
+					UtilsValidator.isSeparadoPorVirgula(part, campo.getNomef());
+					
 				}
 			}
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	
 	}
-		
 	
 	
+	
+
+
 	public static List<String> checaCaractere(String part, String caractere, Integer tamMax) {
 
 		String novalinha = "";
