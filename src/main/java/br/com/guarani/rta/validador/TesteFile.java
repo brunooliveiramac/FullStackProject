@@ -82,7 +82,7 @@ public class TesteFile{
 		String nome;
 		String nome_fisico;
 		String cprimaria;
-		int tam;
+		Integer tam;
 		String ativo;
 		String nulo;
 		String decimal;

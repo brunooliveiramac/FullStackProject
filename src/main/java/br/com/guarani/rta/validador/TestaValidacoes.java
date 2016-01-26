@@ -9,6 +9,8 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
+import br.com.guarani.rta.entidade.Registros;
+
 public class TestaValidacoes {
 	
 	
@@ -99,6 +101,17 @@ public class TestaValidacoes {
 			return false;
 	}
 	
+	private static boolean isTrataLimitCred(String part) {
+		String regex = "^([0-8])$";
+		if(part.matches(regex)){
+			System.out.println("Válido");
+			return true;
+		}else{
+			return false;
+		}
+		
+	}
+	
 	@SuppressWarnings("static-access")
 	public static boolean isEmbalagem(String campo_entrada){
 			String regex = "^(([\\w]{1,6})([;])([0-9]{1,3})([;])([0-9]{1,3})([;])([0-9]{1,3})([;])([@])\\s*)+$";
@@ -136,9 +149,29 @@ public class TestaValidacoes {
 		return false;
 	}
 	
-	 public static void main(String[] args) {
+	private static boolean isEstadoSeparadoPorVirgula(String part) {
+		String regex = "^((([a-zA-Z]){2})([;]){0,1})*$";
+		if (part.matches(regex)) {
+			System.out.println("Válido");
+			return true;
+		}else{
+			return false;
+		}
+	}
+
 	
-		 	isFrete("C");
+	private static boolean isTipoComissao(String dados){
+		String regex = "^([NSM])$";
+		if(dados.matches(regex)){
+			return true;
+		}else{
+			System.out.println("Invalido");
+			return false;
+		}
+	}
+	
+	 public static void main(String[] args) {
 		 
+		 isTipoComissao("N");
 	 }
 }

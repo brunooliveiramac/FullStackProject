@@ -23,11 +23,8 @@ public class UtilsValidator {
 	
 	public static int telefone_mask = 0;
 	public static int data_mask = 0;
-	
-	public static Registros registro;
-	
+	public static Registros registro;	
 	public static List<Registros> registros;
-	
 	public UtilsValidator(){
 		registro = new Registros();
 		registros = new ArrayList<>();
@@ -39,7 +36,7 @@ public class UtilsValidator {
 				if(part != null && !part.isEmpty()) {
 					return true;
 				}else{ 
-					registro = new Registros(campo.getNomef(), "Nulo.", "Não Nulo.", " Campo não pode ser nulo.");
+					registro = new Registros(campo.getNomef(), " Nulo.", "Não Nulo.", " Campo não pode ser nulo.");
 				    registros.add(registro);	
 				 return false;
 				}	
@@ -66,25 +63,27 @@ public class UtilsValidator {
 	}	
 	
 	public  boolean verificaTamanho(String basename, Campo campo, Integer tamBd, Integer tamCarga, String part) throws IOException{
-		if(tamCarga == 0 || tamCarga.SIZE == 0 || tamCarga.equals(null)){
+		if(part.isEmpty() || part.equals(null) || tamCarga == 0){
 			return true;
 		}
-		if(tamBd >= tamCarga || tamCarga == 0) {
+		if(tamBd >= tamCarga) {
 			return true;
 		}  
 		else
-			registro = new Registros(campo.getNomef(), part, "Tam Max:"+tamBd.toString() , " Tamanho do campo incorreto.");
+			registro = new Registros(campo.getNomef(), part, " Tam Max:"+tamBd.toString() , " Tamanho do campo incorreto.");
 		    registros.add(registro);	
-		    
-		return false;
+		    return false;
 	}
 	
 	public static  boolean isTelefone(String numeroTelefone, String camponome) {
-        if(numeroTelefone == null || numeroTelefone.matches(".((10)|([1-9][1-9]).)\\s9?[6-9][0-9]{3}-[0-9]{4}") ||
-                numeroTelefone.matches(".((10)|([1-9][1-9]).)\\s[2-5][0-9]{3}-[0-9]{4}"))
+		if(numeroTelefone.equals(null) || numeroTelefone.isEmpty() || numeroTelefone.length() == 0){
+			return true;
+		}
+        if(numeroTelefone == null || numeroTelefone.matches("(.((10)|([1-9][1-9]).)\\s9?[6-9][0-9]{3}-[0-9]{4})*") ||
+                numeroTelefone.matches("(.((10)|([1-9][1-9]).)\\s[2-5][0-9]{3}-[0-9]{4})*"))
         	return true;
         else
-        	registro = new Registros(camponome, numeroTelefone, "(XX) XXXX-XXXX / (XX) XXXXX-XXXX", " Formato Telefone inválido");
+        	registro = new Registros(camponome, numeroTelefone, " (XX) XXXX-XXXX / (XX) XXXXX-XXXX", " Formato Telefone inválido");
         	registros.add(registro);
         	telefone_mask ++;
         	
@@ -97,7 +96,7 @@ public class UtilsValidator {
 			return true;
 		}
 		else{
-			registro = new Registros(campo, cep, "XX.XXX-XXX", " Formato CEP inválido");
+			registro = new Registros(campo, cep, " XX.XXX-XXX", " Formato CEP inválido");
         	registros.add(registro);
 			return false;
 		}
@@ -110,7 +109,7 @@ public class UtilsValidator {
 		 	return true;
 		}
 		else{
-			registro = new Registros(campo, cnpj, "XX.XXX.XXX/YYYY-ZZ", " Formato CNPJ inválido");
+			registro = new Registros(campo, cnpj, " XX.XXX.XXX/YYYY-ZZ", " Formato CNPJ inválido");
         	registros.add(registro);
 			return false;
 		}
@@ -121,7 +120,7 @@ public class UtilsValidator {
 		if(date.matches("^((19|20)\\d\\d)/(0?[1-9]|1[012])/(0?[1-9]|[12][0-9]|3[01])$")){
 			return true;
 		}else{
-			registro = new Registros(campo, date, "YYYY/MM/DD", " Formato Data inválido");
+			registro = new Registros(campo, date, " YYYY/MM/DD", " Formato Data inválido");
         	registros.add(registro);
         	data_mask ++;
 			return false;
@@ -135,7 +134,7 @@ public class UtilsValidator {
 		 	return true;
 		}
 		else{
-			registro = new Registros(campo, cpf, "XXX.XXX.XXX-XX", " Formato CPF inválido");
+			registro = new Registros(campo, cpf, " XXX.XXX.XXX-XX", " Formato CPF inválido");
         	registros.add(registro);
 			return false;
 		}
@@ -154,9 +153,9 @@ public class UtilsValidator {
 			if(embalagem.matches(regex)){
 				return true; 
 			} 
-			registro = new Registros(campo, embalagem, "D,Q,QM,QMI,@", "Dados embalagem incorretos");
-        	registros.add(registro);
-			return false;
+				registro = new Registros(campo, embalagem, " D,Q,QM,QMI,@", "Dados embalagem incorretos");
+	        	registros.add(registro);
+				return false;
 	} 
 	
 	public static boolean isFrete(String frete, String campo){
@@ -168,25 +167,85 @@ public class UtilsValidator {
 			return true;
 		}
 		else
-		registro = new Registros(campo, frete, "C - F - S", "Dados inválidos");
-    	registros.add(registro);
-		return false;		
+			registro = new Registros(campo, frete, "C - F - S", "Dados inválidos");
+	    	registros.add(registro);
+			return false;		
 	}
 	
 	public static boolean SN(String sn, String campo){
 		if(campo.equals("S") || campo.equals("N"))
 		return true;
 		else 
-		registro = new Registros(campo, sn, "S ou N", "Dados inválidos");
-    	registros.add(registro);
-		return false;
-	}
-	
-	private static boolean isSeparadoPorVirgula(String part, String nomef) {
-		
+			registro = new Registros(campo, sn, " S ou N, somente", "Dados inválidos");
+	    	registros.add(registro);
+			return false;
 	}
 	
 	
+	private static boolean isEstadoSeparadoPorVirgula(String uf, String campo) {
+		String regex = "^((([a-zA-Z]){2})([;]){0,1})*$";
+		if (uf.matches(regex)) {
+			return true;
+		}else{
+			registro = new Registros(campo, uf,  " UF separados por vírgula", "Dados inválidos");
+	    	registros.add(registro);
+	    	return false;
+		}
+	}
+	
+
+	private static boolean isTipoPessoa(String tipo, String campo) {
+		if(tipo.equals("R") || tipo.equals("C") || tipo.equals("P") || tipo.equals("F") || tipo.equals("D") || tipo.equals("I")){
+			return true;
+		}else
+			registro = new Registros(campo, tipo,  " R - C - P - F - D - I", "Dados inválidos");
+    		registros.add(registro);
+			return false;
+	}
+	
+	
+	private static boolean isTrataLimitCred(String dados, String campo) {
+		String regex = "^([0-8])$";
+		if(dados.matches(regex)){
+			return true;
+		}else{
+			registro = new Registros(campo, dados,  " 0, 1, 2, 3, 4, 5, 6, 7 ou 8", "Dados inválidos");
+			registros.add(registro);
+			return false;
+		}
+	}
+	
+	private static boolean isTipoComissao(String dados, String campo){
+		String regex = "^([NSM])$";
+		if(dados.matches(regex)){
+			return true;
+		}else{
+			registro = new Registros(campo, dados,  " N- (Comissão Flexível), S - (Verba), M - (Margem C.)", "Dados inválidos");
+			registros.add(registro);
+			return false;
+		}
+	}
+	
+	private static boolean isPoliticaPrecos(String dados, String campo){
+		String regex = "^([012])$";
+		if(dados.matches(regex)){
+			return true;
+		}else{
+			registro = new Registros(campo, dados,  " 0 - Libera, 1 - Trava, 2 - Ignora ", "Dados inválidos");
+			registros.add(registro);
+			return false;
+		}
+	}
+	
+	private static boolean isPraziMinimoEnt(String dados, String campo){
+		if(dados.equals("999") || dados.equals("0")) return true;
+		else
+			registro = new Registros(campo, dados,  " 999 - Ilimitado, 0 - Desebilitado ", "Dados inválidos");
+			registros.add(registro);
+			return false;
+	}
+
+
 	public static void validaAtributos(Campo campo, String part){
 		int atributo;
 		try {
@@ -218,17 +277,35 @@ public class UtilsValidator {
 					UtilsValidator.SN(part, campo.getNomef());
 					
 				}if(atributo == 9){
-					UtilsValidator.isSeparadoPorVirgula(part, campo.getNomef());
+					UtilsValidator.isEstadoSeparadoPorVirgula(part, campo.getNomef());
+					
+				}if(atributo == 10){
+					UtilsValidator.isTipoPessoa(part, campo.getNomef());
+				
+				}if(atributo == 11){
+					UtilsValidator.isTrataLimitCred(part, campo.getNomef());
+					
+				}if(atributo == 12){
+					UtilsValidator.isTipoComissao(part, campo.getNomef());
+					
+				}if(atributo == 13){
+					UtilsValidator.isPoliticaPrecos(part, campo.getNomef());
+					
+				}if(atributo == 14){
+					UtilsValidator.isPraziMinimoEnt(part, campo.getNomef());
 					
 				}
+				
+				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	
-	
+
+
+
 
 
 	public static List<String> checaCaractere(String part, String caractere, Integer tamMax) {
