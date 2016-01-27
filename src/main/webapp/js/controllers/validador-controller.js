@@ -1,7 +1,10 @@
 angular.module('guaraniApp').controller('ValidadorController', ['$scope', 'Upload', '$timeout', '$http', function ($scope, Upload, $timeout, $http) {
   
 	console.log('Load');
-	$scope.tabelaserros = [];
+	$scope.tabelaserros;
+    $scope.quantity = 20;
+	$scope.filter = '';
+
 
 	$scope.uploadFiles = function(files, errFiles) { 
        

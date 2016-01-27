@@ -16,7 +16,6 @@ public class CEP implements Atributos{
 					return false;
 				}
 	}else{
-		
 		return proximo.validaAtributo(campo, dadosEntrada);
 	  }
 	}

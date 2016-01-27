@@ -47,6 +47,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import br.com.guarani.rta.dao.campo.CampoDAO;
+import br.com.guarani.rta.entidade.CabecalhoErros;
 import br.com.guarani.rta.entidade.Campo;
 import br.com.guarani.rta.entidade.Projeto;
 import br.com.guarani.rta.entidade.Projetos;
@@ -73,10 +74,11 @@ public class RelatorioValidadorResource {
 			public String listErros(@Context ServletContext ctx) throws JsonGenerationException, JsonMappingException, IOException{
 			ObjectMapper mapper = new ObjectMapper();
 		    File folder = new File(ctx.getRealPath("/arquivos/" + folderUser));
+		    CabecalhoErros cabecalhoErros = new CabecalhoErros();
 			List<TabelaErro> tabErros = new ArrayList<TabelaErro>();
-			tabErros =	relatorios.listaErros(folder);
+			cabecalhoErros = relatorios.listaErros(folder);
 			folderUser = null;
-			return mapper.writeValueAsString(tabErros);
+			return mapper.writeValueAsString(cabecalhoErros);
 			} 
 		   
 			@ResponseStatus(value=HttpStatus.OK)

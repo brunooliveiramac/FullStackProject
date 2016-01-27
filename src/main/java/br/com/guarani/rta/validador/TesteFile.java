@@ -23,6 +23,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import br.com.guarani.rta.dao.campo.CampoDAO;
 import br.com.guarani.rta.dao.tabela.TabelaDAO;
+import br.com.guarani.rta.entidade.CabecalhoErros;
 import br.com.guarani.rta.entidade.Campo;
 import br.com.guarani.rta.entidade.LinhaErro;
 import br.com.guarani.rta.entidade.TabelaErro;
@@ -30,12 +31,11 @@ import br.com.guarani.rta.entidade.TabelasErros;
 import br.com.guarani.rta.validador.UtilsValidator;
 
 @Component
-public class TesteFile{
+public class TesteFile {
 	
 	
 	@Autowired
 	private CampoDAO campodao;
-	
 
 	@Autowired
 	private TabelaDAO tabelaDAO;
@@ -44,11 +44,8 @@ public class TesteFile{
     List<Campo> campos = null;
 	
 	
-	
 	public List<String> isCorrectTableName(File file)
-	{
-		
-	
+	{	
 		
 	List<String> filesWorongName = null;
 	filesWorongName = new ArrayList<>();
@@ -62,7 +59,7 @@ public class TesteFile{
 		
     	if(listaNomeTabelaBd.contains(basename))
 		{
-		
+    		//correta
 		}else
 		
 			filesWorongName.add(basename);
@@ -71,10 +68,16 @@ public class TesteFile{
 	}
 	
 
+    /**
+     * @param folder
+     * @return
+     * @throws IOException
+     */
     @SuppressWarnings("static-access")
 	@Test
-	public List<TabelaErro> listaErros (File folder) throws IOException
+	public CabecalhoErros listaErros (File folder) throws IOException
     {
+    	CabecalhoErros cabecalhoErros =  new  CabecalhoErros();
     	List<TabelaErro> tabelaErros = new ArrayList<TabelaErro>();
     	List<LinhaErro> linhaErros = new ArrayList<LinhaErro>();
     	
@@ -104,7 +107,6 @@ public class TesteFile{
 		 loop:
 		 for (File fileEntry : folder.listFiles())
 		 {
-			  
 		        if (fileEntry.isFile()) 
 		        {		        	
 		        	linha = 1;
@@ -116,10 +118,8 @@ public class TesteFile{
 		        	incorrect = isCorrectTableName(folder);
         	    	
 		        	if(incorrect.size() != 0)
-        	    	{
-        	    		tabelasErros.setTabelas_nome_incorreto(incorrect);
-        	    		tabelasErros.setNome_tabela(null);
-		        		tabelaErros.add(tabelasErros);
+        	    	{	//Se há tabelas com nome incorreto, para o loop e retorna as mesmas para o usuario
+        	    		cabecalhoErros.setNomes_tabelas_incorretas(incorrect); 
         	            break loop;
         	    	} 
 
@@ -138,7 +138,7 @@ public class TesteFile{
 		        	    	
 				        	utils = new UtilsValidator();
 		        	        
-		        	        dados = UtilsValidator.checaCaractere(read, "|",200);	
+		        	        dados = UtilsValidator.checaCaractere(read, "|",800);	
 		        	         					        	        
 		        	        looplinha:
 		        	        for(i = 0; i<= dados.size(); i++)
@@ -147,9 +147,8 @@ public class TesteFile{
 		        	    	
 		    	    	    		while (it.hasNext())
 		    	    	    		{		
-		    	    	    			
 				    	    	    			 if(dados.size() != campos.size() && dados.size() != 0)
-								        	        {
+								        	        {	//Se indice diferente (Maior ou Menor).
 				    	    	    				 	if(dados.size() < campos.size()){
 				    	    	    				 		linhaErro = new LinhaErro(linha ++, " com indice incorreto. Faltando dados na linha.");
 										        	        tabelasErros.getLinhas().add(linhaErro);
@@ -163,7 +162,7 @@ public class TesteFile{
 								        	        }
 				    	    	    			 
 				    	    	    			  if(dados.size() == 0)
-								        	        {	
+								        	        {	//Se Linha em branco.
 								        	        	linhaErro = new LinhaErro(linha ++, " em branco.");
 									        	        tabelasErros.getLinhas().add(linhaErro);
 								        	        	break looplinha;
@@ -197,6 +196,7 @@ public class TesteFile{
 					        	linhaErro = new LinhaErro(linha ++, utils.getRegistros());
 			        	        tabelasErros.getLinhas().add(linhaErro);
 			        	        
+			        	        
 					        }
 	        	    } 
 		        	  		        	   
@@ -208,11 +208,20 @@ public class TesteFile{
 		        	finally
 		        	{
 		        		in.close();
-		        	}		        	
-		        		tabelaErros.add(tabelasErros);
+		        	}	
+		        		cabecalhoErros.getList().add(tabelasErros);
 		        	}
+		         
+		         	cabecalhoErros.setTelefone_mask_erros(utils.getTelefone_mask()); //getErros of static variables
+		         	cabecalhoErros.setNull_erros(utils.getNull_erros());
 		  }
 		
-		 return tabelaErros;
+		
+     	 utils.setTelefone_mask(0); //setErros to 0 of static variables for the next interation
+     	 utils.setNull_erros(0);
+		
+		 return cabecalhoErros;
 	}
+
+
 }

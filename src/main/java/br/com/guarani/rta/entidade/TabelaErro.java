@@ -40,7 +40,6 @@ public class TabelaErro implements Serializable {
 
 
 
-
 	public TabelaErro(String nome_tabela, String tabela_incorrect_name, List<LinhaErro> linhas) {
 		this.nome_tabela = nome_tabela;
 		this.tabela_incorrect_name = tabela_incorrect_name;

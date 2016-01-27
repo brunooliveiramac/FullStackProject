@@ -43,47 +43,57 @@
 				 <!--  {{errorMsg}} -->
 			</body>
 			
-			
 			<h5>Relatório</h5> 
 	
 			<div class="table-responsive">		
 					<table class="table">
 						<tr>
-			   					<td>Total de erros</td>
+			   					<td>Total de erros:</td>
 			   					<div class="pull-right">
-				   					<td>{{tabelaserro.linhas.lenght}}</td>
+				   					<td>{{tabelaserros.lenght}}</td>
 				   				</div>
 		   				</tr>
-		   				<tr>
-		   						<td></td>
-					   			<td></td>
-		   				</tr>
+		   				
+		   				<tr ng-show="tabelaserros.telefone_mask_erros != null">
+		   						<td>Máscara de telefone inválida:</td>
+			   					<div class="pull-right">
+				   					<td>{{tabelaserros.telefone_mask_erros}}</td>
+				   				</div>
+		   				</tr> 
+		   				
+		   				<tr ng-show="tabelaserros.null_erros != null">
+		   						<td>Campos que não podem ser nulos:</td>
+			   					<div class="pull-right">
+				   					<td>{{tabelaserros.null_erros}}</td>
+				   				</div>
+		   				</tr> 
+		   				
 					</table>
 			</div>	
 			
+			<input ng-show="tabelaserros.list != null" ng-model="filter" style="margin-top: 20px; margin-bottom: 20px;" class="form-control" placeholder="Filtrar">
 			
-			  
 			
-			<div style="margin-top: 10px; margin-left:5px" ng-repeat="tabelaserro in tabelaserros">
+            <span ng-repeat="incorretas in tabelaserros.nomes_tabelas_incorretas track by $index">Nome da tabela incorreto: {{incorretas}} <br></span>
+			
+			<div style="margin-top: 10px; margin-left:5px" ng-repeat="tabelaserro in tabelaserros.list | filter:filter">
 			
 				 
-					<span ng-repeat="incorretas in tabelaserro.tabelas_nome_incorreto track by $index">Nome da tabela incorreto: {{incorretas}}&nbsp;</span>
 				 		 	
 					<h3>{{tabelaserro.nome_tabela}}  {{tabelaserro.msg}}</h3>
  
-						<div ng-repeat="linha in tabelaserro.linhas">
-							 <strong style="margin-left:10px;">Linha:</strong> {{linha.num_linha}} {{linha.msg_linha}}
+						<div ng-repeat="linha in tabelaserro.linhas | limitTo:quantity">
+							 <strong style="margin-left:12px;">Linha:</strong> {{linha.num_linha}} {{linha.msg_linha}}
 								
 								<h5 ng-show="linha == null">Campos válidos!</h5>
 								 
 								<div ng-repeat="erro in linha.erros">
-									<strong style="margin-left:20px">Campo:</strong> {{erro.campo_nome}} <strong> Conteúdo: </strong> {{erro.conteudo_campo}}<strong> Conteúdo esperado: </strong> {{erro.valor_esperado}} <strong> Comentário:</strong>{{erro.comentario_erro}} 
+									<strong style="margin-left:26px">Campo:</strong> {{erro.campo_nome}} <strong> Conteúdo: </strong> {{erro.conteudo_campo}}<strong> Conteúdo esperado: </strong> {{erro.valor_esperado}} <strong> Comentário:</strong>{{erro.comentario_erro}} 
 						 		</div> 
 						</div> 			
 			</div>
 			
-			
-			
+			 
 			
 			
 			

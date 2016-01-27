@@ -14,8 +14,10 @@ public class CabecalhoErros {
 	private Integer total_erros;
 	private Integer telefone_mask_erros;
 	private Integer date_mask_erros;
+	private Integer null_erros;
 	
 	private List<TabelaErro> list = new ArrayList<TabelaErro>();
+	private List<String> nomes_tabelas_incorretas = new ArrayList<String>();
 
 	
 	public CabecalhoErros() {
@@ -55,13 +57,28 @@ public class CabecalhoErros {
 		this.list = list;
 	}
 
+	
+	public Integer getNull_erros() {
+		return null_erros;
+	}
+	
+	public void setNull_erros(Integer null_erros) {
+		this.null_erros = null_erros;
+	}
+	
+	public List<String> getNomes_tabelas_incorretas() {
+		return nomes_tabelas_incorretas;
+	}
+	
+	public void setNomes_tabelas_incorretas(List<String> nomes_tabelas_incorretas) {
+		this.nomes_tabelas_incorretas = nomes_tabelas_incorretas;
+	}
+	
 
 	@Override
 	public String toString() {
 		return "CabecalhoErros [total_erros=" + total_erros + ", telefone_mask_erros=" + telefone_mask_erros
 				+ ", date_mask_erros=" + date_mask_erros + ", list=" + list + "]";
 	}
-
-	
 
 }

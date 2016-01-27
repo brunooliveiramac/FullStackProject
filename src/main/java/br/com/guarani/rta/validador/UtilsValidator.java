@@ -19,12 +19,22 @@ import br.com.guarani.rta.entidade.RelatorioErros;
 import br.com.guarani.rta.entidade.TabelasErros;
 
 
-public class UtilsValidator {
+/**
+ * @author Bruno - PC
+ * I work with static variable because they are a good choice for utils class. I have only one instance of my 
+ * variables and methods, so I use less memory of my server.
+ *
+ */
+ 
+public class UtilsValidator{
 	
 	public static int telefone_mask = 0;
 	public static int data_mask = 0;
+	public static int null_erros = 0;
+	
 	public static Registros registro;	
 	public static List<Registros> registros;
+	
 	public UtilsValidator(){
 		registro = new Registros();
 		registros = new ArrayList<>();
@@ -37,7 +47,8 @@ public class UtilsValidator {
 					return true;
 				}else{ 
 					registro = new Registros(campo.getNomef(), " Nulo.", "Não Nulo.", " Campo não pode ser nulo.");
-				    registros.add(registro);	
+				    registros.add(registro);
+				    null_erros ++;
 				 return false;
 				}	
 			}
@@ -75,18 +86,18 @@ public class UtilsValidator {
 		    return false;
 	}
 	
-	public static  boolean isTelefone(String numeroTelefone, String camponome) {
-		if(numeroTelefone.equals(null) || numeroTelefone.isEmpty() || numeroTelefone.length() == 0){
+	public static   boolean isTelefone(String numeroTelefone, String camponome) {
+		if(numeroTelefone.equals(null) || numeroTelefone.isEmpty()){
 			return true;
 		}
-        if(numeroTelefone == null || numeroTelefone.matches("(.((10)|([1-9][1-9]).)\\s9?[6-9][0-9]{3}-[0-9]{4})*") ||
+        if(numeroTelefone.matches("(.((10)|([1-9][1-9]).)\\s9?[6-9][0-9]{3}-[0-9]{4})*") ||
                 numeroTelefone.matches("(.((10)|([1-9][1-9]).)\\s[2-5][0-9]{3}-[0-9]{4})*"))
         	return true;
         else
         	registro = new Registros(camponome, numeroTelefone, " (XX) XXXX-XXXX / (XX) XXXXX-XXXX", " Formato Telefone inválido");
         	registros.add(registro);
         	telefone_mask ++;
-        	
+        	System.out.println(telefone_mask);
         return false;
     }
 	
@@ -173,12 +184,14 @@ public class UtilsValidator {
 	}
 	
 	public static boolean SN(String sn, String campo){
-		if(campo.equals("S") || campo.equals("N"))
-		return true;
-		else 
+		String regex = "^(\\s*[NS]\\s*)$";
+		if(campo.matches(regex)){
+			return true;
+		}else{
 			registro = new Registros(campo, sn, " S ou N, somente", "Dados inválidos");
 	    	registros.add(registro);
 			return false;
+		}
 	}
 	
 	
@@ -195,12 +208,15 @@ public class UtilsValidator {
 	
 
 	private static boolean isTipoPessoa(String tipo, String campo) {
-		if(tipo.equals("R") || tipo.equals("C") || tipo.equals("P") || tipo.equals("F") || tipo.equals("D") || tipo.equals("I")){
+		String regex = "^(\\s*[RCPFDI]\\s*)$";
+		if(tipo.matches(regex)){
 			return true;
-		}else
+		}else{
 			registro = new Registros(campo, tipo,  " R - C - P - F - D - I", "Dados inválidos");
     		registros.add(registro);
-			return false;
+    		return false;
+		}
+			
 	}
 	
 	
@@ -238,13 +254,29 @@ public class UtilsValidator {
 	}
 	
 	private static boolean isPraziMinimoEnt(String dados, String campo){
-		if(dados.equals("999") || dados.equals("0")) return true;
-		else
+		String regex = "^(\\s*([9]{3})*\\s*\\s*([0]{1})*\\s*)$";
+		if(dados.matches(regex)){
+			return true;
+		}else{
 			registro = new Registros(campo, dados,  " 999 - Ilimitado, 0 - Desebilitado ", "Dados inválidos");
 			registros.add(registro);
 			return false;
+		}
+			
 	}
+	
+	private static boolean isTipoProdCli(String dados, String campo){
+		String regex = "^([FSGLBRC])$";
+		if(dados.matches(regex)){
+			return true;
+		}else{
+			registro = new Registros(campo, dados,  "Fornecedor, Segmento, Grupo, Linha, Subgrupo, Ramo, GrupoCliente", "Dados inválidos");
+			registros.add(registro);
+			return false;
+		}
 
+	}
+ 
 
 	public static void validaAtributos(Campo campo, String part){
 		int atributo;
@@ -294,6 +326,8 @@ public class UtilsValidator {
 				}if(atributo == 14){
 					UtilsValidator.isPraziMinimoEnt(part, campo.getNomef());
 					
+				}if(atributo == 15){
+					UtilsValidator.isTipoProdCli(part, campo.getNomef());
 				}
 				
 				
@@ -357,6 +391,18 @@ public class UtilsValidator {
 	
 	public int getTelefone_mask() {
 		return telefone_mask;
+	}
+	
+	public static void setTelefone_mask(int telefone_mask) {
+		UtilsValidator.telefone_mask = telefone_mask;
+	}
+	
+	public static int getNull_erros() {
+		return null_erros;
+	}
+	
+	public static void setNull_erros(int null_erros) {
+		UtilsValidator.null_erros = null_erros;
 	}
 
 }
