@@ -50,9 +50,9 @@
 						<tr>
 			   					<td>Total de erros:</td>
 			   					<div class="pull-right">
-				   					<td>{{tabelaserros.lenght}}</td>
+				   					<td>{{tabelaserros.length}}</td>
 				   				</div>
-		   				</tr>
+		   				</tr> 
 		   				
 		   				<tr ng-show="tabelaserros.telefone_mask_erros != null">
 		   						<td>Máscara de telefone inválida:</td>
@@ -66,7 +66,14 @@
 			   					<div class="pull-right">
 				   					<td>{{tabelaserros.null_erros}}</td>
 				   				</div>
-		   				</tr> 
+		   				 </tr> 
+		   				 
+		   				 <tr ng-show="tabelaserros.formato_embalagem != null">
+		   						<td>Formato embalagem:</td>
+			   					<div class="pull-right">
+				   					<td>{{tabelaserros.formato_embalagem}}</td>
+				   				</div>
+		   				 </tr> 
 		   				
 					</table>
 			</div>	
@@ -78,10 +85,19 @@
 			
 			<div style="margin-top: 10px; margin-left:5px" ng-repeat="tabelaserro in tabelaserros.list | filter:filter">
 			
-				 
 				 		 	
 					<h3>{{tabelaserro.nome_tabela}}  {{tabelaserro.msg}}</h3>
- 
+					
+						 <div class="table-responsive">
+						 <tr>
+						 	<td>Total de registros:</td>
+				   			<td>{{tabelaserro.linhas.length}}</td>
+				   				
+				   				
+				   		
+						 </tr>
+						 </div>
+  
 						<div ng-repeat="linha in tabelaserro.linhas | limitTo:quantity">
 							 <strong style="margin-left:12px;">Linha:</strong> {{linha.num_linha}} {{linha.msg_linha}}
 								

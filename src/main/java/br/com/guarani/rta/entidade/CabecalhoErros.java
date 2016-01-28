@@ -15,6 +15,7 @@ public class CabecalhoErros {
 	private Integer telefone_mask_erros;
 	private Integer date_mask_erros;
 	private Integer null_erros;
+	private Integer formato_embalagem;
 	
 	private List<TabelaErro> list = new ArrayList<TabelaErro>();
 	private List<String> nomes_tabelas_incorretas = new ArrayList<String>();
@@ -73,6 +74,15 @@ public class CabecalhoErros {
 	public void setNomes_tabelas_incorretas(List<String> nomes_tabelas_incorretas) {
 		this.nomes_tabelas_incorretas = nomes_tabelas_incorretas;
 	}
+	
+	public Integer getFormato_embalagem() {
+		return formato_embalagem;
+	}
+	
+	public void setFormato_embalagem(Integer formato_embalagem) {
+		this.formato_embalagem = formato_embalagem;
+	}
+	
 	
 
 	@Override

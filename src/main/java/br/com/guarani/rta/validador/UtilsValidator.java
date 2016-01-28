@@ -31,6 +31,9 @@ public class UtilsValidator{
 	public static int telefone_mask = 0;
 	public static int data_mask = 0;
 	public static int null_erros = 0;
+	public static int formato_embalagem = 0;
+	
+	
 	
 	public static Registros registro;	
 	public static List<Registros> registros;
@@ -57,7 +60,7 @@ public class UtilsValidator{
 	}
 	
 	public  boolean verifyIsString(String part){
-		if(part.contains("[a-zA-Z]+")) return true;
+		if(part.contains("\\s*[a-zA-Z]+")) return true;
 		else
 		return false;	
 	}	
@@ -90,20 +93,19 @@ public class UtilsValidator{
 		if(numeroTelefone.equals(null) || numeroTelefone.isEmpty()){
 			return true;
 		}
-        if(numeroTelefone.matches("(.((10)|([1-9][1-9]).)\\s9?[6-9][0-9]{3}-[0-9]{4})*") ||
-                numeroTelefone.matches("(.((10)|([1-9][1-9]).)\\s[2-5][0-9]{3}-[0-9]{4})*"))
-        	return true;
+		 if(numeroTelefone.matches("\\s*(.((10)|([1-9][1-9]).)\\s9?[6-9][0-9]{3}-[0-9]{4})*\\s*") ||
+	                numeroTelefone.matches("\\s*(.((10)|([1-9][1-9]).)\\s[2-5][0-9]{3}-[0-9]{4})*\\s*"))
+	        	return true;
         else
         	registro = new Registros(camponome, numeroTelefone, " (XX) XXXX-XXXX / (XX) XXXXX-XXXX", " Formato Telefone inválido");
         	registros.add(registro);
         	telefone_mask ++;
-        	System.out.println(telefone_mask);
         return false;
     }
 	
 	
 	public static  boolean isCep(String cep, String campo){
-		if(cep.matches("\\d{5}-\\d{3}")){
+		if(cep.matches("^\\s*(\\d{5}-\\d{3})\\s*$")){
 			return true;
 		}
 		else{
@@ -116,9 +118,9 @@ public class UtilsValidator{
 	
 	
 	public static  boolean isCnpj(String cnpj, String campo){
-		if(cnpj.matches("^([0-9]{2}[.]?[0-9]{3}[.]?[0-9]{3}[/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[.]?[0-9]{3}[.]?[0-9]{3}[-]?[0-9]{2})$")){
+		if(cnpj.matches("^\\s*([0-9]{2}[.]?[0-9]{3}[.]?[0-9]{3}[/]?[0-9]{4}[-]?[0-9]{2})\\s*$")){
 		 	return true;
-		}
+		} 
 		else{
 			registro = new Registros(campo, cnpj, " XX.XXX.XXX/YYYY-ZZ", " Formato CNPJ inválido");
         	registros.add(registro);
@@ -141,7 +143,7 @@ public class UtilsValidator{
 	
 	
 	public static boolean isCpf(String cpf, String campo){
-		if(cpf.matches("^([0-9]{2}[.]?[0-9]{3}[.]?[0-9]{3}[/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[.]?[0-9]{3}[.]?[0-9]{3}[-]?[0-9]{2})$")){
+		if(cpf.matches("^\\s*([0-9]{3}[.]?[0-9]{3}[.]?[0-9]{3}[-]?[0-9]{2})\\s*$")){
 		 	return true;
 		}
 		else{
@@ -153,7 +155,7 @@ public class UtilsValidator{
 	
 	@SuppressWarnings("static-access")
 	public static boolean isEmbalagem(String embalagem, String campo){
-			String regex = "^(([\\w]{1,6})([;])([0-9]{1,3})([;])([0-9]{1,3})([;])([0-9]{1,3})([;])([@])\\s*)+$";
+		String regex = "^\\s*(([^\\s]{1,6})([;])([0-9]{1,3})([;])([0-9]{1,3})([;])([0-9]{1,3})([;])([@])\\s*)+$";
 			/*  D,Q,QM,QMI,@
 			  	D = Descrição (máximo 6 caracteres);
 				Q = Quantidade;
@@ -163,18 +165,17 @@ public class UtilsValidator{
 			 */    
 			if(embalagem.matches(regex)){
 				return true; 
-			} 
+			} else{
 				registro = new Registros(campo, embalagem, " D,Q,QM,QMI,@", "Dados embalagem incorretos");
 	        	registros.add(registro);
+	        	formato_embalagem ++;
 				return false;
+			}
 	} 
 	
 	public static boolean isFrete(String frete, String campo){
-		List<String> dados = new ArrayList<>();
-		dados.add("C");
-		dados.add("F");
-		dados.add("S");
-		if(dados.contains(frete)){
+		String regex = "^(\\s*[CFS]\\s*)$";
+		if(frete.matches(regex)){
 			return true;
 		}
 		else
@@ -185,7 +186,7 @@ public class UtilsValidator{
 	
 	public static boolean SN(String sn, String campo){
 		String regex = "^(\\s*[NS]\\s*)$";
-		if(campo.matches(regex)){
+		if(sn.matches(regex)){
 			return true;
 		}else{
 			registro = new Registros(campo, sn, " S ou N, somente", "Dados inválidos");
@@ -193,10 +194,10 @@ public class UtilsValidator{
 			return false;
 		}
 	}
-	
+	 
 	
 	private static boolean isEstadoSeparadoPorVirgula(String uf, String campo) {
-		String regex = "^((([a-zA-Z]){2})([;]){0,1})*$";
+		String regex = "^\\s*(((([a-zA-Z]){2})([;]){0,1})*)\\s*$";
 		if (uf.matches(regex)) {
 			return true;
 		}else{
@@ -221,7 +222,7 @@ public class UtilsValidator{
 	
 	
 	private static boolean isTrataLimitCred(String dados, String campo) {
-		String regex = "^([0-8])$";
+		String regex = "^\\s*([0-8])\\s*$";
 		if(dados.matches(regex)){
 			return true;
 		}else{
@@ -232,7 +233,7 @@ public class UtilsValidator{
 	}
 	
 	private static boolean isTipoComissao(String dados, String campo){
-		String regex = "^([NSM])$";
+		String regex = "^\\s*([NSM])\\s*$";
 		if(dados.matches(regex)){
 			return true;
 		}else{
@@ -243,7 +244,7 @@ public class UtilsValidator{
 	}
 	
 	private static boolean isPoliticaPrecos(String dados, String campo){
-		String regex = "^([012])$";
+		String regex = "^\\s*([012])\\s*$";
 		if(dados.matches(regex)){
 			return true;
 		}else{
@@ -276,58 +277,84 @@ public class UtilsValidator{
 		}
 
 	}
+	
+	public static boolean isCodigoPorVirgula(String codigo, String campo){
+		String regex = "(([^~,]*)[;]{0,1})*";
+		String lastIndex = null;
+		if(codigo == null || codigo.isEmpty()){
+			return true;
+		}
+		
+		lastIndex = codigo.substring(codigo.length() - 1); 
+		if(lastIndex.equals(";")){
+			registro = new Registros(campo, codigo,  "AA11;AA22", "Não deve haver virgula como ultimo caractere");
+			registros.add(registro);
+			return false;
+		}	
+		if(codigo.matches(regex)){
+			return true;
+		}
+		else{
+			registro = new Registros(campo, codigo,  "AA11;AA22", "Códigos devem ser sepados por vírgula");
+			registros.add(registro);
+			return false;
+		}
+	}
  
-
+ 
 	public static void validaAtributos(Campo campo, String part){
 		int atributo;
 		try {
 			if(campo.getAtributos() == null){
 			}else{
 				atributo =	campo.getAtributos().getId();		
-				if(atributo == 1){
+				if(atributo == 1 && !part.isEmpty()){
 					UtilsValidator.isTelefone(part, campo.getNomef());
 				}
-				if(atributo == 2){
+				if(atributo == 2 && !part.isEmpty()){
 					UtilsValidator.isCnpj(part, campo.getNomef());
 				}
-				if(atributo == 3){
+				if(atributo == 3 && !part.isEmpty()){
 					UtilsValidator.isCpf(part, campo.getNomef());
 				}
-				if(atributo == 4){
+				if(atributo == 4 && !part.isEmpty()){
 					UtilsValidator.isDate(part, campo.getNomef());
 				}
-				if(atributo == 5){ 
+				if(atributo == 5 && !part.isEmpty()){ 
 					UtilsValidator.isCep(part, campo.getNomef());
 				}
-				if(atributo == 6){
+				if(atributo == 6 && !part.isEmpty()){
 					UtilsValidator.isEmbalagem(part, campo.getNomef());
 					
-				}if(atributo == 7){
+				}if(atributo == 7 && !part.isEmpty()){
 					UtilsValidator.isFrete(part, campo.getNomef());
 					
-				}if(atributo == 8){
+				}if(atributo == 8 && !part.isEmpty()){
 					UtilsValidator.SN(part, campo.getNomef());
 					
-				}if(atributo == 9){
+				}if(atributo == 9 && !part.isEmpty()){
 					UtilsValidator.isEstadoSeparadoPorVirgula(part, campo.getNomef());
 					
-				}if(atributo == 10){
+				}if(atributo == 10 && !part.isEmpty()){
 					UtilsValidator.isTipoPessoa(part, campo.getNomef());
 				
-				}if(atributo == 11){
+				}if(atributo == 11 && !part.isEmpty()){
 					UtilsValidator.isTrataLimitCred(part, campo.getNomef());
 					
-				}if(atributo == 12){
+				}if(atributo == 12 && !part.isEmpty()){
 					UtilsValidator.isTipoComissao(part, campo.getNomef());
 					
-				}if(atributo == 13){
+				}if(atributo == 13 && !part.isEmpty()){
 					UtilsValidator.isPoliticaPrecos(part, campo.getNomef());
 					
-				}if(atributo == 14){
+				}if(atributo == 14 && !part.isEmpty()){
 					UtilsValidator.isPraziMinimoEnt(part, campo.getNomef());
 					
-				}if(atributo == 15){
+				}if(atributo == 15 && !part.isEmpty()){
 					UtilsValidator.isTipoProdCli(part, campo.getNomef());
+					
+				}if(atributo == 16 && !part.isEmpty()){
+					UtilsValidator.isCodigoPorVirgula(part, campo.getNomef());
 				}
 				
 				
@@ -404,5 +431,19 @@ public class UtilsValidator{
 	public static void setNull_erros(int null_erros) {
 		UtilsValidator.null_erros = null_erros;
 	}
+	
+	public static int getFormato_embalagem() {
+		return formato_embalagem;
+	}
+	
+	public static void setFormato_embalagem(int formato_embalagem) {
+		UtilsValidator.formato_embalagem = formato_embalagem;
+	}
+	
+	public static void setData_mask(int data_mask) {
+		UtilsValidator.data_mask = data_mask;
+	}
+	
+	
 
 }

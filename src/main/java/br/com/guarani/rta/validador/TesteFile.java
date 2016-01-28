@@ -68,11 +68,7 @@ public class TesteFile {
 	}
 	
 
-    /**
-     * @param folder
-     * @return
-     * @throws IOException
-     */
+
     @SuppressWarnings("static-access")
 	@Test
 	public CabecalhoErros listaErros (File folder) throws IOException
@@ -196,7 +192,6 @@ public class TesteFile {
 					        	linhaErro = new LinhaErro(linha ++, utils.getRegistros());
 			        	        tabelasErros.getLinhas().add(linhaErro);
 			        	        
-			        	        
 					        }
 	        	    } 
 		        	  		        	   
@@ -214,11 +209,13 @@ public class TesteFile {
 		         
 		         	cabecalhoErros.setTelefone_mask_erros(utils.getTelefone_mask()); //getErros of static variables
 		         	cabecalhoErros.setNull_erros(utils.getNull_erros());
+		         	cabecalhoErros.setFormato_embalagem(utils.getFormato_embalagem());
 		  }
 		
 		
      	 utils.setTelefone_mask(0); //setErros to 0 of static variables for the next interation
      	 utils.setNull_erros(0);
+     	 utils.setFormato_embalagem(0);
 		
 		 return cabecalhoErros;
 	}
