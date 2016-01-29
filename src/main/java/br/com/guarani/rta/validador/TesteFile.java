@@ -147,6 +147,7 @@ public class TesteFile {
 								        	        {	//Se indice diferente (Maior ou Menor).
 				    	    	    				 	if(dados.size() < campos.size()){
 				    	    	    				 		linhaErro = new LinhaErro(linha ++, " com indice incorreto. Faltando dados na linha.");
+				    	    	    				 		
 										        	        tabelasErros.getLinhas().add(linhaErro);
 										        	        break looplinha;	
 				    	    	    				 	}else{

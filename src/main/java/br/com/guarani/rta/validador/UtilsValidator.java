@@ -77,9 +77,9 @@ public class UtilsValidator{
 	}	
 	
 	public  boolean verificaTamanho(String basename, Campo campo, Integer tamBd, Integer tamCarga, String part) throws IOException{
-		if(part.isEmpty() || part.equals(null) || tamCarga == 0){
+		if(part.isEmpty() || part.equals(null) || tamBd == 0){
 			return true;
-		}
+		} 
 		if(tamBd >= tamCarga) {
 			return true;
 		}  
@@ -87,7 +87,7 @@ public class UtilsValidator{
 			registro = new Registros(campo.getNomef(), part, " Tam Max:"+tamBd.toString() , " Tamanho do campo incorreto.");
 		    registros.add(registro);	
 		    return false;
-	}
+	} 
 	
 	public static   boolean isTelefone(String numeroTelefone, String camponome) {
 		if(numeroTelefone.equals(null) || numeroTelefone.isEmpty()){
@@ -133,7 +133,7 @@ public class UtilsValidator{
 		if(date.matches("^((19|20)\\d\\d)/(0?[1-9]|1[012])/(0?[1-9]|[12][0-9]|3[01])$")){
 			return true;
 		}else{
-			registro = new Registros(campo, date, " YYYY/MM/DD", " Formato Data inválido");
+			registro = new Registros(campo, date, " AAAA/MM/DD", " Formato Data inválido");
         	registros.add(registro);
         	data_mask ++;
 			return false;

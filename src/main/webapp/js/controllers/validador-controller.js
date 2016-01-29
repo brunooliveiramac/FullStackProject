@@ -4,6 +4,16 @@ angular.module('guaraniApp').controller('ValidadorController', ['$scope', 'Uploa
 	$scope.tabelaserros;
     $scope.quantity = 20;
 	$scope.filter = '';
+	
+
+	 
+	$scope.getTotal = function(){
+	    var total_sum = 0;
+	    total_sum = ($scope.tabelaserros.telefone_mask_erros + $scope.tabelaserros.null_erros);
+	    $scope.total = total_sum;
+	    console.log(total);
+	    return total_sum;
+	};
 
 
 	$scope.uploadFiles = function(files, errFiles) { 
@@ -24,14 +34,19 @@ angular.module('guaraniApp').controller('ValidadorController', ['$scope', 'Uploa
                 $timeout(function () {
                     file.result = response.data;
                     console.log(response.data);
-	                  
+                    	
+                    
                     	$http.get('rest/relatorios')
 	            		.success(function(tabelaserros){
 	            			$scope.tabelaserros = tabelaserros;
 	            			console.log(tabelaserros);
+	                    	$scope.getTotal();
+
 	            		}).error(function(){
 	            			$scope.mensagem = 'Erro ao obter Tabelas de Erros!';
 	            		});
+                    	
+
             	
                 });
             }, function (response) {

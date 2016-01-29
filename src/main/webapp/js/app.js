@@ -1,6 +1,9 @@
 angular.module('guaraniApp', ['ngRoute', 'ngCookies', 'guaraniApp.services', 'appServices','treeGrid','ui.bootstrap.contextMenu', 'ngFileUpload']) 
 	.config(
-		[ '$routeProvider', '$locationProvider', '$httpProvider', function($routeProvider, $locationProvider, $httpProvider) {
+		[ '$routeProvider', '$locationProvider', '$httpProvider', '$compileProvider', function($routeProvider, $locationProvider, $httpProvider, $compileProvider) {
+			
+	        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|file|blob):/);
+
 			
 			$routeProvider.when('/create', {
 				templateUrl: 'partials/create.html',
@@ -21,6 +24,12 @@ angular.module('guaraniApp', ['ngRoute', 'ngCookies', 'guaraniApp.services', 'ap
 				templateUrl: 'partials/validador.html',
 				controller: 'ValidadorController'
 			});
+			
+			$routeProvider.when('/files', {
+				templateUrl: 'partials/files.html',
+				controller: 'DownloadController'
+			});
+			  
 			 
 			$routeProvider.when('/ver/:gua_pro_id', {
 				templateUrl: 'partials/treeGrid.html',
@@ -38,7 +47,7 @@ angular.module('guaraniApp', ['ngRoute', 'ngCookies', 'guaraniApp.services', 'ap
 				controller: 'treeGridControllerCompare'
 			});
 			
-			
+			 
 			$routeProvider.otherwise({
 				templateUrl: 'partials/index.html',
 				controller: 'ProjetosController' 
@@ -171,6 +180,7 @@ function CreateController($scope, $location, ProjetosService) {
 	};
 };
 
+
  
 function LoginController($scope, $rootScope, $location, $cookieStore, UserService) {
 	
@@ -213,13 +223,25 @@ services.factory('UserService', function($resource) {
 		);
 });
 
+
 services.factory('ProjetosService', function($resource) {
 	
 	return $resource('rest/projetos/:id', {id: '@id'});
 });
 
+angular.module('guaraniApp')
+    .factory('FileService', function ($http) {
+        return {
+            getFile: function (params) {
+            	 return 'http://192.168.0.56' + ':' + '8080' + '/' + 'guaranirta' + '/rest/files/word/'+params
+        }
+    };
+});
 
-
+services.getFile = function () {
+    return url + ':' + port + '/' + context + '/rest/files/word'
+};
+ 
 
 services.factory('ParamService', function() {
 	  return { 

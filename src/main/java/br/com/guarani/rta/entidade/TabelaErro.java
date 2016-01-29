@@ -15,7 +15,7 @@ public class TabelaErro implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	
-	private Integer cont_total_erros;
+	private Integer cont_erros_faltando_dados;
 	private Integer cont_total_mask_telefone;
 	
 	
@@ -101,12 +101,13 @@ public class TabelaErro implements Serializable {
 		this.msg = msg;
 	}
 	
-	public Integer getCont_total_erros() {
-		return cont_total_erros;
+
+	public Integer getCont_erros_faltando_dados() {
+		return cont_erros_faltando_dados;
 	}
 	
-	public void setCont_total_erros(Integer cont_total_erros) {
-		this.cont_total_erros = cont_total_erros;
+	public void setCont_erros_faltando_dados(Integer cont_erros_faltando_dados) {
+		this.cont_erros_faltando_dados = cont_erros_faltando_dados;
 	}
 	
 	
