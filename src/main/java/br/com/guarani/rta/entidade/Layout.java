@@ -27,11 +27,13 @@ public class Layout implements br.com.guarani.rta.entidade.Entity {
 	private static final long serialVersionUID = 1L;
 	
 
-
+	
 	private Date gua_lay_data_lancamento;
 	private String gua_lay_notas;
 	private int gua_lay_num_ver;
 	private Projeto projeto;
+    private String layoutPath;
+
 	
 	 
 	
@@ -69,6 +71,20 @@ public class Layout implements br.com.guarani.rta.entidade.Entity {
 	}
 
 
+	public String getLayoutPath() {
+		return layoutPath;
+	}
+	
+	public void setLayoutPath(String layoutPath) {
+		this.layoutPath = layoutPath;
+	}
+	@Override
+	public String toString() {
+		return "Layout [gua_lay_data_lancamento=" + gua_lay_data_lancamento + ", gua_lay_notas=" + gua_lay_notas
+				+ ", gua_lay_num_ver=" + gua_lay_num_ver + ", projeto=" + projeto + ", layoutPath=" + layoutPath + "]";
+	}
+	
+	
 	
 	
 	

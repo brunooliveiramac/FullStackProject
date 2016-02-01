@@ -17,24 +17,39 @@
 		<div class="page-header">
 					<h3>Arquivos</h3>   
 		</div>
-			
-			<form class="form-horizontal" ng-submit="getFile()" role="form">
 			<div class="form-group">
 			
-			
+			<form class="form-horizontal"role="form">
+						
 			 <p ng-show="message.length" class="alert alert-info">{{message}}</p>
-			 
-			 <h4>Layouts</h4>
-     	     <select ng-model="layoutList" ng-options="layout.name for layout in layouts"></select>
-		
 			  
-			 </div>
+			 <h4>Versões</h4>
+<!--      	     <select ng-model="layoutList" ng-options="layout.name for layout in layouts"></select>
+ -->		
+ 			 <select
+			        		name="layout" class="form-control" 
+			        		ng-model="layout"
+			        		ng-change="select()"
+			        		ng-options=" 'Versão ' + layout.gua_lay_num_ver for layout in layouts">
+			        		<option value="">Selecione para download</option>
+			 </select> 			  
+			</form>
+			
+			</br>
+			
 			<div class="form-group"> 
 				<div>
-					<button type="submit" class="btn btn-success">Download</button>
+					<button ng-click="getFile()" type="submit" class="btn btn-success">Download DOC</button> {{doc}}
 				</div>
-			</div
-			</form>
+			</div>
+			 
+			<div class="form-group"> 
+				<div>
+					<button  ng-click="getApk()" type="submit" class="btn btn-success">Download APK</button> {{apk}}
+				</div>
+			</div>
+			
+			</div>
 			
 			
 <!-- 			<button class="btn btn-success" type="submit" ng-click="getFile()">Download</button>

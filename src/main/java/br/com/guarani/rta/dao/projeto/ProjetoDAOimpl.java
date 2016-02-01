@@ -17,7 +17,6 @@ import br.com.guarani.rta.commons.ProjetoSqlConstants;
 import br.com.guarani.rta.connection.DBConnection;
 import br.com.guarani.rta.entidade.Projeto;
 
-@Repository
 public class ProjetoDAOimpl implements ProjetoDAO {
 
 	private Connection con;

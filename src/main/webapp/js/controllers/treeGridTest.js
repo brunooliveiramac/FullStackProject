@@ -7,7 +7,6 @@ angular.module('guaraniApp').controller('treeGridController', function ($scope, 
 	      
 			      var versao = '';
 	      
-	  
 
 		    	  $http.get('rest/tabelas/'+$routeParams.gua_pro_id)
 		          .success(function(tree_data ){

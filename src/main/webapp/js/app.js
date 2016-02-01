@@ -1,4 +1,4 @@
-angular.module('guaraniApp', ['ngRoute', 'ngCookies', 'guaraniApp.services', 'appServices','treeGrid','ui.bootstrap.contextMenu', 'ngFileUpload']) 
+var app = angular.module('guaraniApp', ['ngRoute', 'ngCookies', 'guaraniApp.services', 'appServices','treeGrid','ui.bootstrap.contextMenu', 'ngFileUpload', 'ui.mask']) 
 	.config(
 		[ '$routeProvider', '$locationProvider', '$httpProvider', '$compileProvider', function($routeProvider, $locationProvider, $httpProvider, $compileProvider) {
 			
@@ -25,7 +25,7 @@ angular.module('guaraniApp', ['ngRoute', 'ngCookies', 'guaraniApp.services', 'ap
 				controller: 'ValidadorController'
 			});
 			
-			$routeProvider.when('/files', {
+			$routeProvider.when('/files/:gua_pro_id', {
 				templateUrl: 'partials/files.html',
 				controller: 'DownloadController'
 			});
@@ -52,7 +52,19 @@ angular.module('guaraniApp', ['ngRoute', 'ngCookies', 'guaraniApp.services', 'ap
 				templateUrl: 'partials/index.html',
 				controller: 'ProjetosController' 
 			});
+
 			
+			app.directive('focus', function() {
+				  return {
+				    restrict: 'A',
+				    link: function($scope,elem,attrs) {
+
+						  elem.bind('keydown', function (e) {
+				        elem.next()[0].focus();
+				    });
+				    }
+				  }
+			}) 
 			
 			
 			$locationProvider.hashPrefix('!');
@@ -131,6 +143,7 @@ angular.module('guaraniApp', ['ngRoute', 'ngCookies', 'guaraniApp.services', 'ap
 		
 		 /* Try getting valid user from cookie or go to login page */
 		var originalPath = $location.path();
+
 		$location.path("/login");
 		var authToken = $cookieStore.get('authToken');
 		if (authToken !== undefined) {
@@ -187,6 +200,14 @@ function LoginController($scope, $rootScope, $location, $cookieStore, UserServic
 	$scope.rememberMe = false;
     $scope.mensagem = '';
     
+    $scope.keypressHandler = function(event, nextIdx){
+        if(event.keyCode == 13){
+            angular.element(
+                document.querySelector('#f_'+nextIdx))[0].focus();
+
+        }
+    }
+    
 	$scope.login = function() {
 			UserService.authenticate($.param({username: $scope.username, password: $scope.password}),
 			function(authenticationResult) {
@@ -237,6 +258,17 @@ angular.module('guaraniApp')
         }
     };
 });
+
+
+angular.module('guaraniApp')
+.factory('FileServiceApk', function ($http) {
+    return {
+        getFile: function (params) {
+        	 return 'http://localhost' + ':' + '8080' + '/' + 'guaranirta' + '/rest/files/word/apk/'+params
+    }
+};
+});
+
 
 services.getFile = function () {
     return url + ':' + port + '/' + context + '/rest/files/word'

@@ -15,11 +15,9 @@ angular.module('guaraniApp').controller('ProjetosController', function($scope, $
 		$scope.wait = false;
 
 	}else{
-		
 		console.log('Não autorizado!');
 		$location.path('/login');
-	}
-	
+	}	
 	
 	$scope.selected = 'None';
 

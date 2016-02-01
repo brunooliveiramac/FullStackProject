@@ -14,8 +14,10 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import javax.annotation.Resource;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -24,6 +26,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.xml.ws.WebServiceContext;
 
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
@@ -39,12 +42,21 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.sun.jersey.server.wadl.WadlApplicationContext;
 
 import br.com.guarani.rta.dao.campo.CampoDAO;
 import br.com.guarani.rta.entidade.CabecalhoErros;
@@ -59,12 +71,15 @@ import br.com.guarani.rta.validador.UtilsValidator;
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 
-@Component
+
+//@Scope(value=WebApplicationContext.SCOPE_REQUEST)
+@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
+@Component 
 @Path("/relatorios")
 public class RelatorioValidadorResource {
-	
-		private String folderUser = null;
-		
+	 	  
+			private String folderUser = null;
+		 
 			@Autowired
 			private TesteFile relatorios;
 			 
@@ -87,6 +102,18 @@ public class RelatorioValidadorResource {
 			@Consumes(MediaType.MULTIPART_FORM_DATA)
 		    @Path("/upload")
 		    public void listValid(@Context HttpServletRequest req, @Context ServletContext ct) throws IOException, FileUploadException {
+
+				/*HttpSession session= req.getSession(true);
+		    	Object foo = session.getAttribute("foo");
+		    	if (foo!=null) {
+		    		System.out.println("XXXXXXXXXXX: "+ foo.toString());
+		    	} else {
+		    		foo = "bar";
+		    		session.setAttribute("XXXXXXXXXXX: "+"foo", "bar");
+		    	}*/
+				
+				 
+				
 				if(folderUser == null){		
 					folderUser = RandomStringUtils.randomAlphabetic(10);			
 				    File folder = new File(ct.getRealPath("/arquivos/" + folderUser));
@@ -137,6 +164,18 @@ public class RelatorioValidadorResource {
 					        inputStream.close();
 					    }
 				    return file;            
+				}
+				
+				
+				private boolean isAuthenticated(){
+					
+					Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+					Object principal = authentication.getPrincipal();
+					
+					if (principal instanceof String && ((String) principal).equals("anonymousUser")) {
+						return true;
+					}
+					return false;
 				}
 
 }

@@ -1,4 +1,4 @@
-angular.module('guaraniApp').controller('ValidadorController', ['$scope', 'Upload', '$timeout', '$http', function ($scope, Upload, $timeout, $http) {
+angular.module('guaraniApp').controller('ValidadorController', ['$scope', 'Upload', '$timeout', '$http','$location', function ($scope, Upload, $timeout, $http, $location) {
   
 	console.log('Load');
 	$scope.tabelaserros;
@@ -6,14 +6,23 @@ angular.module('guaraniApp').controller('ValidadorController', ['$scope', 'Uploa
 	$scope.filter = '';
 	
 
+	
+	if(angular.isDefined($scope.user)){
+
+	}else{
+		console.log('Não autorizado!');
+		$location.path('/login');
+	}	
+	 
 	 
 	$scope.getTotal = function(){
 	    var total_sum = 0;
-	    total_sum = ($scope.tabelaserros.telefone_mask_erros + $scope.tabelaserros.null_erros);
+	    total_sum = ($scope.tabelaserros.telefone_mask_erros + $scope.tabelaserros.null_erros + $scope.tabelaserros.dados_abaixo
+	    		+ $scope.tabelaserros.dados_acima + !isNaN($scope.tabelaserros.cnpj) + !isNaN($scope.tabelaserros.cpf));
 	    $scope.total = total_sum;
 	    console.log(total);
 	    return total_sum;
-	};
+	}; 
 
 
 	$scope.uploadFiles = function(files, errFiles) { 
@@ -60,7 +69,18 @@ angular.module('guaraniApp').controller('ValidadorController', ['$scope', 'Uploa
     }
 	
 	
-	
+	/*$scope.getTotal = function(){
+    var total_sum = 0;
+    total_sum = (!isNaN($scope.tabelaserros.telefone_mask_erros) + !isNaN($scope.tabelaserros.null_erros) + !isNaN($scope.tabelaserros.dados_abaixo)
+    		+ !isNaN($scope.tabelaserros.dados_acima) + !isNaN($scope.tabelaserros.cnpj) + !isNaN($scope.tabelaserros.cpf) + !isNaN($scope.tabelaserros.cep)
+    		+ !isNaN($scope.tabelaserros.frete) + !isNaN($scope.tabelaserros.sina) + !isNaN($scope.tabelaserros.estado_virgula) + !isNaN($scope.tabelaserros.tipo_pessoa)
+    		+ !isNaN($scope.tabelaserros.limite_credito) + !isNaN($scope.tabelaserros.tipo_comissao) + !isNaN($scope.tabelaserros.politica_precos) 
+    		+ !isNaN($scope.tabelaserros.prazo_min) + !isNaN($scope.tabelaserros.tipo_prod_cli) + !isNaN($scope.tabelaserros.codigo_virgula));
+    $scope.total = total_sum;
+    console.log(total);
+    return total_sum;
+	};*/
+
 	
 		
 	

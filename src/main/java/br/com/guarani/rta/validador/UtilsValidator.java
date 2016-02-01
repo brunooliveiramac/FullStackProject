@@ -11,6 +11,9 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.stereotype.Component;
 
 import br.com.guarani.rta.entidade.Campo;
 import br.com.guarani.rta.entidade.LinhaErro;
@@ -25,16 +28,30 @@ import br.com.guarani.rta.entidade.TabelasErros;
  * variables and methods, so I use less memory of my server.
  *
  */
- 
+
+@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
+@Component
 public class UtilsValidator{
 	
 	public static int telefone_mask = 0;
 	public static int data_mask = 0;
 	public static int null_erros = 0;
 	public static int formato_embalagem = 0;
+	public static int codigo_virgula = 0;
+	public static int tipo_prod_cli = 0;
+	public static int prazo_min_ent = 0;
+	public static int politica_precos = 0;
+	public static int tipo_comissao = 0;
+	public static int limite_credito = 0;
+	public static int tipo_pessoa = 0;
+	public static int estado_virgulo = 0;
+	public static int sina = 0;
+	public static int frete = 0;
+	public static int cep = 0;
+	public static int formato_cpf = 0;
+	public static int formato_cnpj = 0;
 	
-	
-	
+	 
 	public static Registros registro;	
 	public static List<Registros> registros;
 	
@@ -104,17 +121,18 @@ public class UtilsValidator{
     }
 	
 	
-	public static  boolean isCep(String cep, String campo){
-		if(cep.matches("^\\s*(\\d{5}-\\d{3})\\s*$")){
+	public static  boolean isCep(String ce, String campo){
+		if(ce.matches("^\\s*(\\d{5}-\\d{3})\\s*$")){
 			return true;
 		}
 		else{
-			registro = new Registros(campo, cep, " XX.XXX-XXX", " Formato CEP inválido");
+			registro = new Registros(campo, ce, " XX.XXX-XXX", " Formato CEP inválido");
         	registros.add(registro);
+        	cep ++;
 			return false;
 		}
 	}
-	
+	  
 	
 	
 	public static  boolean isCnpj(String cnpj, String campo){
@@ -124,6 +142,7 @@ public class UtilsValidator{
 		else{
 			registro = new Registros(campo, cnpj, " XX.XXX.XXX/YYYY-ZZ", " Formato CNPJ inválido");
         	registros.add(registro);
+        	formato_cnpj = 0;
 			return false;
 		}
 	}
@@ -149,6 +168,7 @@ public class UtilsValidator{
 		else{
 			registro = new Registros(campo, cpf, " XXX.XXX.XXX-XX", " Formato CPF inválido");
         	registros.add(registro);
+        	formato_cpf ++;
 			return false;
 		}
 	}
@@ -173,17 +193,18 @@ public class UtilsValidator{
 			}
 	} 
 	
-	public static boolean isFrete(String frete, String campo){
+	public static boolean isFrete(String fret, String campo){
 		String regex = "^(\\s*[CFS]\\s*)$";
-		if(frete.matches(regex)){
+		if(fret.matches(regex)){
 			return true;
 		}
 		else
-			registro = new Registros(campo, frete, "C - F - S", "Dados inválidos");
-	    	registros.add(registro);
+			registro = new Registros(campo, fret, "C - F - S", "Dados inválidos");
+	    	registros.add(registro);	
+	    	frete ++;
 			return false;		
 	}
-	
+	 
 	public static boolean SN(String sn, String campo){
 		String regex = "^(\\s*[NS]\\s*)$";
 		if(sn.matches(regex)){
@@ -191,6 +212,7 @@ public class UtilsValidator{
 		}else{
 			registro = new Registros(campo, sn, " S ou N, somente", "Dados inválidos");
 	    	registros.add(registro);
+	    	sina ++;
 			return false;
 		}
 	}
@@ -203,6 +225,7 @@ public class UtilsValidator{
 		}else{
 			registro = new Registros(campo, uf,  " UF separados por vírgula", "Dados inválidos");
 	    	registros.add(registro);
+	    	estado_virgulo ++;
 	    	return false;
 		}
 	}
@@ -228,6 +251,7 @@ public class UtilsValidator{
 		}else{
 			registro = new Registros(campo, dados,  " 0, 1, 2, 3, 4, 5, 6, 7 ou 8", "Dados inválidos");
 			registros.add(registro);
+			limite_credito ++;
 			return false;
 		}
 	}
@@ -239,6 +263,7 @@ public class UtilsValidator{
 		}else{
 			registro = new Registros(campo, dados,  " N- (Comissão Flexível), S - (Verba), M - (Margem C.)", "Dados inválidos");
 			registros.add(registro);
+			tipo_comissao ++;
 			return false;
 		}
 	}
@@ -250,6 +275,7 @@ public class UtilsValidator{
 		}else{
 			registro = new Registros(campo, dados,  " 0 - Libera, 1 - Trava, 2 - Ignora ", "Dados inválidos");
 			registros.add(registro);
+			politica_precos ++;
 			return false;
 		}
 	}
@@ -261,6 +287,7 @@ public class UtilsValidator{
 		}else{
 			registro = new Registros(campo, dados,  " 999 - Ilimitado, 0 - Desebilitado ", "Dados inválidos");
 			registros.add(registro);
+			prazo_min_ent ++;
 			return false;
 		}
 			
@@ -273,6 +300,7 @@ public class UtilsValidator{
 		}else{
 			registro = new Registros(campo, dados,  "Fornecedor, Segmento, Grupo, Linha, Subgrupo, Ramo, GrupoCliente", "Dados inválidos");
 			registros.add(registro);
+			tipo_prod_cli ++;
 			return false;
 		}
 
@@ -289,6 +317,7 @@ public class UtilsValidator{
 		if(lastIndex.equals(";")){
 			registro = new Registros(campo, codigo,  "AA11;AA22", "Não deve haver virgula como ultimo caractere");
 			registros.add(registro);
+			codigo_virgula ++;
 			return false;
 		}	
 		if(codigo.matches(regex)){
@@ -297,6 +326,7 @@ public class UtilsValidator{
 		else{
 			registro = new Registros(campo, codigo,  "AA11;AA22", "Códigos devem ser sepados por vírgula");
 			registros.add(registro);
+			codigo_virgula ++;
 			return false;
 		}
 	}
@@ -364,10 +394,6 @@ public class UtilsValidator{
 		}
 	}
 	
-
-
-
-
 
 	public static List<String> checaCaractere(String part, String caractere, Integer tamMax) {
 
@@ -443,7 +469,127 @@ public class UtilsValidator{
 	public static void setData_mask(int data_mask) {
 		UtilsValidator.data_mask = data_mask;
 	}
-	
+	 
+	public static int getCodigo_virgula() {
+		return codigo_virgula;
+	}
 	
 
+	public static int getTipo_prod_cli() {
+		return tipo_prod_cli;
+	}
+	
+	public static int getPrazo_min_ent() {
+		return prazo_min_ent;
+	}
+	
+	public static void setPrazo_min_ent(int prazo_min_ent) {
+		UtilsValidator.prazo_min_ent = prazo_min_ent;
+	}
+	
+	public static int getPolitica_precos() {
+		return politica_precos;
+	}
+	
+	public static int getTipo_comissao() {
+		return tipo_comissao;
+	}
+	
+	public static int getLimite_credito() {
+		return limite_credito;
+	}
+	
+	public static int getTipo_pessoa() {
+		return tipo_pessoa;
+	}
+	
+	public static int getEstado_virgulo() {
+		return estado_virgulo;
+	}
+	
+	public static int getSina() {
+		return sina;
+	}
+
+	public static int getFrete() {
+		return frete;
+	}
+	
+	
+	public static int getCep() {
+		return cep;
+	}
+	
+	public static int getFormato_cpf() {
+		return formato_cpf;
+	}
+	
+	public static int getFormato_cnpj() {
+		return formato_cnpj;
+	}
+
+
+	public static int getData_mask() {
+		return data_mask;
+	}
+
+
+	public static void setCodigo_virgula(int codigo_virgula) {
+		UtilsValidator.codigo_virgula = codigo_virgula;
+	}
+
+
+	public static void setTipo_prod_cli(int tipo_prod_cli) {
+		UtilsValidator.tipo_prod_cli = tipo_prod_cli;
+	}
+
+
+	public static void setPolitica_precos(int politica_precos) {
+		UtilsValidator.politica_precos = politica_precos;
+	}
+
+
+	public static void setTipo_comissao(int tipo_comissao) {
+		UtilsValidator.tipo_comissao = tipo_comissao;
+	}
+
+
+	public static void setLimite_credito(int limite_credito) {
+		UtilsValidator.limite_credito = limite_credito;
+	}
+
+
+	public static void setTipo_pessoa(int tipo_pessoa) {
+		UtilsValidator.tipo_pessoa = tipo_pessoa;
+	}
+
+
+	public static void setEstado_virgulo(int estado_virgulo) {
+		UtilsValidator.estado_virgulo = estado_virgulo;
+	}
+
+
+	public static void setSina(int sina) {
+		UtilsValidator.sina = sina;
+	}
+
+
+	public static void setFrete(int frete) {
+		UtilsValidator.frete = frete;
+	}
+
+
+	public static void setCep(int cep) {
+		UtilsValidator.cep = cep;
+	}
+
+
+	public static void setFormato_cpf(int formato_cpf) {
+		UtilsValidator.formato_cpf = formato_cpf;
+	}
+
+
+	public static void setFormato_cnpj(int formato_cnpj) {
+		UtilsValidator.formato_cnpj = formato_cnpj;
+	}	
 }

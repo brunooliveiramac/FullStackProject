@@ -3,6 +3,8 @@ package br.com.guarani.rta.rest.resources;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -32,6 +34,8 @@ import br.com.guarani.rta.transfer.UserTransfer;
 @Path("/user")
 public class UserResource
 {
+	
+
 	//Gerenciador de dependencias, @Autowired: Spring Framework
 	@Autowired
 	private UserDetailsService userService;
@@ -75,7 +79,7 @@ public class UserResource
 	 */
 	@Path("authenticate")
 	@POST
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON) 
 	public TokenTransfer authenticate(@FormParam("username") String username, @FormParam("password") String password)
 	{
 		UsernamePasswordAuthenticationToken authenticationToken =
@@ -86,10 +90,14 @@ public class UserResource
 		/*
 		 * Reload user as password of authentication principal will be null after authorization and
 		 * password is needed for token generation
-		 * Sempre que regarregar (F5) é necessario logar para gerar o token
+		 * Sempre que regarregar (F5), é necessario logar para gerar o token
 		 */
 		UserDetails userDetails = this.userService.loadUserByUsername(username);
-
+		
+		//Session Management
+	/*	HttpSession session = req.getSession();
+		session.setAttribute("usuarioLogado", userDetails);*/
+		
 		return new TokenTransfer(TokenUtils.createToken(userDetails));
 	}
 

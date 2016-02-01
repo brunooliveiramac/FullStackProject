@@ -27,7 +27,6 @@ import br.com.guarani.rta.entidade.Layout;
 import br.com.guarani.rta.entidade.Projeto;
 import br.com.guarani.rta.entidade.Tabela;
 
-@Repository
 public class TabelaDAOimpl extends JpaDao<Tabela, Long> implements TabelaDAO {
 	
 	public TabelaDAOimpl() {

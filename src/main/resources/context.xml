@@ -15,7 +15,9 @@
 			http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd">
 
 	<context:annotation-config />
-
+	
+	<context:component-scan base-package="br.com.guarani.rta" />
+	
 	<!--
 		DATABASE SETUP 
 	 -->
@@ -58,10 +60,10 @@
 	<bean id="userDao" class="br.com.guarani.rta.dao.usuario.JpaUserDao">
 	</bean> 
 
-	<bean id="projetoDao" class="br.com.guarani.rta.dao.projeto.ProjetoDAOimpl">
+	<bean id="projetoDaoimpl" class="br.com.guarani.rta.dao.projeto.ProjetoDAOimpl">
 	</bean>
 	  
-	<bean id="tabelaDao" class="br.com.guarani.rta.dao.tabela.TabelaDAOimpl">
+	<bean id="tabelaDaoimpl" class="br.com.guarani.rta.dao.tabela.TabelaDAOimpl">
 	</bean>
 	 
 	<bean id="layoutDao" class="br.com.guarani.rta.dao.layout.LayoutDAOimpl">
@@ -80,7 +82,7 @@
 	</bean>
 	
 	<bean id="atributo" class="br.com.guarani.rta.entidade.Atributo">
-	</bean>
+	</bean> 
 	
 	<bean id="relatorioerros" class="br.com.guarani.rta.entidade.RelatorioErros">
 	</bean>
@@ -95,6 +97,15 @@
 	</bean>
 	 
 	   
+	<bean id="utils" class="br.com.guarani.rta.validador.UtilsValidator">
+	</bean>
+	 
+	
+	<bean id="cabecalhoErro" class="br.com.guarani.rta.entidade.CabecalhoErros">
+	</bean>
+	
+	<bean id="validadorResource" class="br.com.guarani.rta.rest.resources.RelatorioValidadorResource">
+	</bean>
 	
 	
 	<bean id="dataBaseInitializer" class="br.com.guarani.rta.dao.DataBaseInitializer" init-method="initDataBase">
@@ -107,18 +118,28 @@
 	<!--
 		INIT REST COMPONENTS 
 	 -->
-	
-	<context:component-scan base-package="br.com.guarani.rta.rest.resources" />
-	
+
 	<bean id="objectMapper" class="org.codehaus.jackson.map.ObjectMapper" />
 	
 	<!-- 
 		SPRING SECURITY SETUP
 	-->
-	
+	 
 	<bean id="passwordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder">
 		<constructor-arg value="ThisIsASecretSoChangeMe" />
 	</bean>
+	
+	<bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
+    <property name="scopes">
+        <map> 
+            <entry key="session">
+                <bean class="org.springframework.context.support.SimpleThreadScope"/>
+            </entry>
+        </map>
+    </property>
+	</bean>	
+	
+	
 	
 	<security:authentication-manager id="authenticationManager">
 		<security:authentication-provider user-service-ref="userDao">
@@ -145,8 +166,8 @@
 		<security:intercept-url method="POST" pattern="/rest/relatorios/upload/**" access="hasRole('admin')" />
 		
 		
-		<security:intercept-url method="GET" pattern="/rest/projetos/**" access="hasRole('user')" />
-		<security:intercept-url method="PUT" pattern="/rest/projetos/**" access="hasRole('admin')" />
+<!-- 		<security:intercept-url method="GET" pattern="/rest/projetos/**" access="hasRole('user')" />
+ -->		<security:intercept-url method="PUT" pattern="/rest/projetos/**" access="hasRole('admin')" />
 		<security:intercept-url method="POST" pattern="/rest/projetos/**" access="hasRole('admin')" />
 		<security:intercept-url method="DELETE" pattern="/rest/projetos/**" access="hasRole('admin')" />
 	</security:http>

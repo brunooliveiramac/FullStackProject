@@ -1,9 +1,14 @@
 package br.com.guarani.rta.validador;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+
 import br.com.guarani.rta.entidade.Registros;
+
 
 public class TestaValidacoes {
 

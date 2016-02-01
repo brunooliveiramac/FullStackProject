@@ -37,144 +37,47 @@ public class DownloadResource {
 	
 	  
 	  
-	  @Path("/hello")
-	  @GET
-	  @Produces(MediaType.TEXT_HTML)
-	  public String returnVersion() {
+	   @Path("/hello")
+	   @GET
+	   @Produces(MediaType.TEXT_HTML)
+	   public String returnVersion() {
 		System.out.println("Hello");
 	    return "Hello User!";
-	  }
-	   
-	
-	/*  @GET
-	  @Path("/download")
-	  @Produces(MediaType.APPLICATION_OCTET_STREAM)
-	  public Response downloadFilebyPath(@Context ServletContext ct) {
-		  File folder = new File(ct.getRealPath("/download/layout/"));
-		  System.out.println(folder.getAbsolutePath());
-		  String fileName = "/Ola.docx";
-		  return download(fileName, folder);
-	  }
+	   }
 	  
-	  private Response download(String fileName, File folder) {  
-	    String fileLocation = folder.getAbsolutePath() + fileName;	    
-	    Response response = null;
-	    NumberFormat myFormat = NumberFormat.getInstance();
-	      myFormat.setGroupingUsed(true);
-	    File file = new File(folder.getAbsolutePath()  + fileName);
-	    if (file.exists()) {
-	     
-
-	   
-	      ResponseBuilder builder = Response.ok(file);
-	      builder.header("Content-Disposition", "attachment; filename=" + file.getName());
-	      response = builder.build();
-	      
-	     
-	     long file_size = file.length();
-         System.out.println(String.format("Inside downloadFile==> fileName: %s, fileSize: %s bytes", 
-         fileName, myFormat.format(file_size)));
-         
-         
-         
-	    } else {
-	    		  response = Response.status(404).
-	              entity("FILE NOT FOUND: " + fileLocation).
-	              type("text/plain").
-	              build();
-	    }
-	    return response;
-	  }  
-	  
-	  
-	  
-	  	@GET
-	    @Path("/arquivo")
-	    public Response downloadPdfFile(@Context ServletContext ct)
-	    { final File folder = new File(ct.getRealPath("/download/layout/Ola.docx"));
-	      	
-	    	
-	        StreamingOutput fileStream =  new StreamingOutput()
-	        {
-	            public void write(java.io.OutputStream output) throws IOException, WebApplicationException
-	            {
-	                try
-	                {
-	                	
-	                    java.nio.file.Path path = Paths.get(folder.getAbsolutePath());
-	                    byte[] data = Files.readAllBytes(path);
-	                    output.write(data);
-	                    output.flush();
-
-	                }
-	                catch (Exception e)
-	                {
-	                    throw new WebApplicationException();
-	                }
-	            }
-	        };
-
-	        
-	        return Response
-	                .ok(fileStream, MediaType.APPLICATION_OCTET_STREAM)
-	                .header("content-disposition","attachment; filename = myfile.dox")
-	                .build();
-	    }
-	  	
-	  	
-	  	*/
-
-	  /*  @GET
-	    @Path("/get")
-	    @Produces("application/msword")
-        @PermitAll
-	    public Response getFile(@Context ServletContext ct) {
-
-	        File file = new File(ct.getRealPath("/download/layout/Ola.docx"));
-
- 
-	        ResponseBuilder response = Response.ok((Object) file);
-	        response.header("Content-Disposition",
-	            "attachment; filename=\"file_from_server.docx\"");
-	        return response.build();
-
-	    }*/
-	    
 	    
 	    @GET
 	    @Path("/word/{filename}")
 	    @Produces("application/msword")
-	    public Response downloadZippedFile(@PathParam("filename")  String fileName, @Context ServletContext ct){
-	       
-	    	File file = new File(ct.getRealPath("/download/layout/"+fileName));
-	         
-	        System.out.println(file.getAbsolutePath());
-	  
-	        ResponseBuilder response = Response.ok((Object) file);
+	    public Response downloadFileWord(@PathParam("filename")  String fileName, @Context ServletContext ct){
+	    	File file = new File(ct.getRealPath("/download/layout/"+fileName));	         
+	        Response response = null;
+
+	    	if(file.exists()){
+	    		ResponseBuilder builder = Response.ok((Object) file);
+	    		builder.header("Content-Disposition", "attachment; filename="+file.getName());
+		        return builder.build();
+	    	}else{
+	    		response = Response.status(404).
+	    	              entity("FILE NOT FOUND: " + fileName).
+	    	              build();
+	    	}
+			return response;	    	
+	    } 
+	     
+	    
+	    @GET
+	    @Path("/word/apk/{filename}")
+	    @Produces("application/msword")
+	    public Response downloadFileApk(@PathParam("filename")  String fileName, @Context ServletContext ct){
+	      	File file = new File(ct.getRealPath("/download/apk/"+fileName));
+
+	      	ResponseBuilder response = Response.ok((Object) file);
 	        response.header("Content-Disposition", "attachment; filename="+file.getName());
 	        return response.build();
 	    } 
 	     
-	    
-	    
-	    @RequestMapping(value = "/download/getfile", method = RequestMethod.GET, produces = "application/msword")
-	    public void demo(HttpServletResponse response, @Context ServletContext ct) throws IOException {
-	       
-	        BufferedWriter writer = new BufferedWriter(response.getWriter());
-	        try {
-	        	
-	        response.setHeader("Content-Disposition", "attachment; filename=\"Layout.docx\"");
-	        File file = new File(ct.getRealPath("/download/layout/Layout.doc"));
-		    writer.write(file.toString());
-		   
-	        } finally {
-	        writer.flush();
-	        writer.close();
-	        
-	        }
-	    }
 	     
-	
 				
 
 }

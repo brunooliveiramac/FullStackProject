@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Query;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,5 +28,14 @@ public class LayoutDAOimpl extends JpaDao<Layout, Long> implements LayoutDAO {
 	public LayoutDAOimpl() {
 		super(Layout.class);
 	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public List<Layout> layoutByProject(Integer idProjeto){
+		Query query = this.getEntityManager().createQuery("SELECT l from Layout l WHERE l.projeto.gua_pro_id =:idProjeto");
+		return query.setParameter("idProjeto", idProjeto)
+				.getResultList();
+			 
+	}  
 
 }

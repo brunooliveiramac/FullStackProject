@@ -58,5 +58,15 @@ public class LayoutResource
 		List<Layout> layouts = this.layoutDao.findAll();
 		return mapper.writeValueAsString(layouts) ; 
 	}
+	 
+	
+	@GET
+	@Path("/projeto/{idprojeto}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String listByProject(@PathParam("idprojeto") Integer idprojeto) throws JsonGenerationException, JsonMappingException, IOException{
+		ObjectMapper mapper = new ObjectMapper();
+		List<Layout> layouts = this.layoutDao.layoutByProject(idprojeto);
+		return mapper.writeValueAsString(layouts) ; 
+	}
 
 } 

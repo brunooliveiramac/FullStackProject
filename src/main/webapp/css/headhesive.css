@@ -1,18 +1,4 @@
-/*----------------------------------------------------------------------------*\
-    Headhesive Specific Styles
-/*----------------------------------------------------------------------------*/
 
-/**
- * Headhesive element clone
- * > `clone` class for the cloned element:
- *
- |  var options = {
- |      classes {
- |          clone: 'banner--clone';
- |      }
- |  }
- *
- */
 .banner--clone {
 
     /* Required styles */
@@ -36,37 +22,13 @@
 }
 
 
-/**
- * Headhesive stick
- * > `stick` class for the cloned element:
- *
- |  var options = {
- |      classes {
- |          stick: 'banner--stick';
- |      }
- |  }
- *
- */
 .banner--stick {
 
-    /* Translate back to 0%; */
     -webkit-transform: translateY(0%);
         -ms-transform: translateY(0%);
             transform: translateY(0%);
 }
 
 
-/**
- * Headhesive unstick
- * > `unstick` class for the cloned element:
- *
- |  var options = {
- |      classes {
- |          unstick: 'banner--unstick';
- |      }
- |  }
- *
- */
 .banner--unstick {
-    /* Not required to use, but could be useful to have */
 }

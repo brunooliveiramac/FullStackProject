@@ -10,6 +10,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -17,12 +19,15 @@ import org.apache.commons.io.LineIterator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import br.com.guarani.rta.dao.campo.CampoDAO;
 import br.com.guarani.rta.dao.tabela.TabelaDAO;
+import br.com.guarani.rta.dao.tabela.TabelaDAOimpl;
 import br.com.guarani.rta.entidade.CabecalhoErros;
 import br.com.guarani.rta.entidade.Campo;
 import br.com.guarani.rta.entidade.LinhaErro;
@@ -30,25 +35,28 @@ import br.com.guarani.rta.entidade.TabelaErro;
 import br.com.guarani.rta.entidade.TabelasErros;
 import br.com.guarani.rta.validador.UtilsValidator;
 
-@Component
+@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
+@Component 
 public class TesteFile {
 	
+	private static int dados_acima = 0; 
+	private static int dados_abaixo = 0; 
+
 	
 	@Autowired
 	private CampoDAO campodao;
 
-	@Autowired
+	@Autowired  
 	private TabelaDAO tabelaDAO;
 	
-	@Autowired
+	@Autowired  
     List<Campo> campos = null;
-	
-	
+	 
 	public List<String> isCorrectTableName(File file)
 	{	
 		
 	List<String> filesWorongName = null;
-	filesWorongName = new ArrayList<>();
+	filesWorongName = new ArrayList<>(); 
 
 	List<String> listaNomeTabelaBd = tabelaDAO.getTablesName();
 	
@@ -147,12 +155,13 @@ public class TesteFile {
 								        	        {	//Se indice diferente (Maior ou Menor).
 				    	    	    				 	if(dados.size() < campos.size()){
 				    	    	    				 		linhaErro = new LinhaErro(linha ++, " com indice incorreto. Faltando dados na linha.");
-				    	    	    				 		
 										        	        tabelasErros.getLinhas().add(linhaErro);
+										        	        dados_abaixo ++;
 										        	        break looplinha;	
 				    	    	    				 	}else{
 				    	    	    				 		linhaErro = new LinhaErro(linha ++, " com indice incorreto. Dados acima do esperado.");
 										        	        tabelasErros.getLinhas().add(linhaErro);
+										        	        dados_acima ++;
 										        	        break looplinha;	
 				    	    	    				 	}
 								        	        	
@@ -211,15 +220,64 @@ public class TesteFile {
 		         	cabecalhoErros.setTelefone_mask_erros(utils.getTelefone_mask()); //getErros of static variables
 		         	cabecalhoErros.setNull_erros(utils.getNull_erros());
 		         	cabecalhoErros.setFormato_embalagem(utils.getFormato_embalagem());
-		  }
-		
-		
+		         	cabecalhoErros.setCodigo_virgula(utils.getCodigo_virgula());
+		         	cabecalhoErros.setTipo_prod_cli(utils.getTipo_prod_cli());
+		         	cabecalhoErros.setPrazo_min(utils.getPrazo_min_ent());
+		         	cabecalhoErros.setPolitica_precos(utils.getPolitica_precos());
+		         	cabecalhoErros.setTipo_comissao(utils.getTipo_comissao());
+		         	cabecalhoErros.setLimite_credito(utils.getLimite_credito());
+		         	cabecalhoErros.setTipo_pessoa(utils.getTipo_pessoa());
+		         	cabecalhoErros.setEstado_virgulo(utils.getEstado_virgulo());
+		         	cabecalhoErros.setSina(utils.getSina());
+		         	cabecalhoErros.setFrete(utils.getFrete());
+		         	cabecalhoErros.setCep(utils.getCep());
+		         	cabecalhoErros.setFormato_cpf(utils.getFormato_cpf());
+		         	cabecalhoErros.setFormato_cnpj(utils.getFormato_cnpj());
+		         	cabecalhoErros.setDate_mask_erros(utils.getData_mask());
+		         	cabecalhoErros.setDados_acima(dados_acima);
+		         	cabecalhoErros.setDados_abaixo(dados_abaixo);
+		  }		
      	 utils.setTelefone_mask(0); //setErros to 0 of static variables for the next interation
      	 utils.setNull_erros(0);
      	 utils.setFormato_embalagem(0);
+     	 utils.setCodigo_virgula(0);
+     	 utils.setTipo_prod_cli(0);
+     	 utils.setPrazo_min_ent(0);
+     	 utils.setPrazo_min_ent(0);
+     	 utils.setPolitica_precos(0);
+     	 utils.setTipo_pessoa(0);
+     	 utils.setEstado_virgulo(0);
+     	 utils.setSina(0);
+     	 utils.setFrete(0);
+     	 utils.setCep(0);
+     	 utils.setFormato_cnpj(0);
+     	 utils.setFormato_cpf(0);
+     	 utils.setFormato_cnpj(0);
+     	 utils.setData_mask(0); 
+     	 dados_acima = 0;
+     	 dados_abaixo = 0;
+     	 
 		
 		 return cabecalhoErros;
 	}
 
-
+    
+    public static int getDados_acima() {
+		return dados_acima;
+	}
+    
+    public static void setDados_acima(int dados_acima) {
+		TesteFile.dados_acima = dados_acima;
+	}
+    
+    public static int getDados_abaixo() {
+		return dados_abaixo;
+	}
+    
+    public static void setDados_abaixo(int dados_abaixo) {
+		TesteFile.dados_abaixo = dados_abaixo;
+	}
+    
+    
+    
 }

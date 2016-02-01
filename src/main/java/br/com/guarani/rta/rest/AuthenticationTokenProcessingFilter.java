@@ -15,6 +15,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.GenericFilterBean;
 
+import br.com.guarani.rta.entidade.User;
+
 /*
  * Controla a Servlet
  * 
@@ -35,8 +37,16 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
 			ServletException
 	{
+		
+		//Session Management
+	/*	HttpServletRequest req = (HttpServletRequest) request;
+		String uri = req.getRequestURI();
+		String usuario = getUsuario(req);
+		System.out.println("Usuario " + usuario + " acessando a URI " + uri);
+		chain.doFilter(request, response);
+		 */
+		
 		HttpServletRequest httpRequest = this.getAsHttpRequest(request);
-
 		String authToken = this.extractAuthTokenFromRequest(httpRequest);
 		String userName = TokenUtils.getUserNameFromToken(authToken);
 
@@ -54,6 +64,12 @@ public class AuthenticationTokenProcessingFilter extends GenericFilterBean
 		}
 
 		chain.doFilter(request, response);
+	}
+	
+	private String getUsuario(HttpServletRequest req) {
+		User usuario = (User) req.getSession().getAttribute("usuarioLogado");
+		if(usuario==null) return "deslogado";
+		return usuario.getUsername();
 	}
 
 

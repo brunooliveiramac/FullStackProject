@@ -3,8 +3,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-<!--    <link rel="stylesheet" href="css/menuleft.css">
- -->        
+       
  		<link rel="stylesheet" href="css/validador.css">
  		<link rel="stylesheet" href="css/efeitos.css">
    		<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
@@ -74,7 +73,115 @@
 				   					<td>{{tabelaserros.formato_embalagem}}</td>
 				   				</div>
 		   				 </tr> 
-		   				
+		   				 
+		   				 <tr ng-show="tabelaserros.codigo_virgula != null && tabelaserros.codigo_virgula != 0">
+		   						<td>Código deve ser separado por vírgula:</td>
+			   					<div class="pull-right">
+				   					<td>{{tabelaserros.codigo_virgula}}</td>
+				   				</div>
+		   				 </tr>  
+		   				 
+		   				<tr ng-show="tabelaserros.tipo_prod_cli != null && tabelaserros.tipo_prod_cli != 0">
+		   						<td>Tipo Cliente:</td> 
+			   		 			<div class="pull-right">
+				   					<td>{{tabelaserros.tipo_prod_cli}}</td>
+				   				</div>
+		   				 </tr>  
+		   				   
+		   				 <tr ng-show="tabelaserros.prazo_min != null && tabelaserros.prazo_min != 0">
+		   						<td>Prazo mínimo para o preenchimento não aceito:</td> 
+			   		 			<div class="pull-right">
+				   					<td>{{tabelaserros.prazo_min}}</td>
+				   				</div>
+		   				 </tr>  
+		   				  
+		   				 <tr ng-show="tabelaserros.politica_precos != null && tabelaserros.politica_precos != 0">
+		   						<td>Política de Preços, preenchimento não aceito:</td> 
+			   		 			<div class="pull-right">
+				   					<td>{{tabelaserros.politica_precos}}</td>
+				   				</div>
+		   				 </tr>  
+		   				 
+		   				  <tr ng-show="tabelaserros.tipo_comissao != null && tabelaserros.tipo_comissao != 0">
+		   						<td>Tipo de comissão gerada, preenchimento não aceito:</td> 
+			   		 			<div class="pull-right">
+				   					<td>{{tabelaserros.tipo_comissao}}</td>
+				   				</div>
+		   				 </tr>  
+		   				 
+		   				<tr ng-show="tabelaserros.limite_credito != null && tabelaserros.limite_credito != 0">
+		   						<td>Limite de crédito, preenchimento não aceito:</td> 
+			   		 			<div class="pull-right">
+				   					<td>{{tabelaserros.limite_credito}}</td>
+				   				</div>
+		   				 </tr>  
+		   				  
+		   				  
+		   				<tr ng-show="tabelaserros.tipo_pessoa != null && tabelaserros.tipo_pessoa != 0">
+		   						<td>Tipo pessoa para calculos físcais, preenchimento não aceito:</td> 
+			   		 			<div class="pull-right">
+				   					<td>{{tabelaserros.tipo_pessoa}}</td>
+				   				</div>
+		   				 </tr>  
+		   				 
+		   				<tr ng-show="tabelaserros.estado_virgulo != null && tabelaserros.estado_virgulo != 0">
+		   						<td>Estado deve ser separado por ponto e virgula (;). Preenchimento não aceito:</td> 
+			   		 			<div class="pull-right">
+				   					<td>{{tabelaserros.estado_virgula}}</td>
+				   				</div>
+		   				 </tr> 
+		   				  
+		   				 
+		   				<tr ng-show="tabelaserros.sina != null && tabelaserros.sina  != 0">
+		   						<td>Campo deve conter S ou N. Preenchimento não aceito:</td> 
+			   		 			<div class="pull-right">
+				   					<td>{{tabelaserros.sina}}</td>
+				   				</div>
+		   				 </tr>   
+		   				 
+		   				<tr ng-show="tabelaserros.frete != null && tabelaserros.frete  != 0">
+		   						<td>Tipo frete inválido. Preenchimento não aceito:</td> 
+			   		 			<div class="pull-right">
+				   					<td>{{tabelaserros.frete}}</td>
+				   				</div>
+		   				 </tr>  
+		   				  
+		   				 	 
+		   				<tr ng-show="tabelaserros.cep!= null && tabelaserros.cep != 0">
+		   						<td>Tipo CEP inválido. Preenchimento não aceito:</td> 
+			   		 			<div class="pull-right">
+				   					<td>{{tabelaserros.cep}}</td>
+				   				</div>
+		   				 </tr>  
+		   				 
+		   				<tr ng-show="tabelaserros.cpf!= null && tabelaserros.cpf != 0">
+		   						<td>Tipo CPF inválido. Preenchimento não aceito:</td> 
+			   		 			<div class="pull-right">
+				   					<td>{{tabelaserros.cpf}}</td>
+				   				</div>
+		   				 </tr>  
+		   				 
+		   				<tr ng-show="tabelaserros.cnpj!= null && tabelaserros.cnpj != 0">
+		   						<td>Tipo CNPJ inválido. Preenchimento não aceito:</td> 
+			   		 			<div class="pull-right">
+				   					<td>{{tabelaserros.cnpj}}</td> 
+				   				</div>
+		   				 </tr>   
+		   				 
+		   				 <tr ng-show="tabelaserros.dados_acima != null && tabelaserros.dados_acima != 0">
+		   						<td>Dados acima do esperado:</td> 
+			   		 			<div class="pull-right">
+				   					<td>{{tabelaserros.dados_acima}}</td> 
+				   				</div>
+		   				 </tr>  
+		   				  
+		   				  <tr ng-show="tabelaserros.dados_abaixo != null && tabelaserros.dados_abaixo != 0">
+		   						<td>Dados abaixo do esperado:</td> 
+			   		 			<div class="pull-right">
+				   					<td>{{tabelaserros.dados_abaixo}}</td> 
+				   				</div>
+		   				 </tr>  
+		   				 
 					</table>
 			</div>	
 			
@@ -112,24 +219,6 @@
 			
 </div>
 
-
-<!-- <div id='cssmenu'>
-		<ul>
-		   <li><a href='#'><span>Exemplo</span></a></li>
-		   <li class='active has-sub'><a href='#'><span>APK</span></a>
-		      <ul>
-		         <li class='has-sub'><a href='#'><span>APK</span></a>
-		         </li>
-		         <li class='has-sub'><a href='#'><span>Exemplo</span></a>
-		         </li>
-		      </ul>
-		   </li>
-		   <li><a href='#'><span>Exemplo</span></a></li>
-		   <li class='last'><a href='#'><span>Exemplo</span></a></li>
-		</ul>
-</div>
-		 -->
-		
 		
 
  

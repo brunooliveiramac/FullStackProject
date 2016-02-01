@@ -25,6 +25,8 @@ import org.codehaus.jackson.map.SerializationConfig.Feature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,9 +36,9 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import br.com.guarani.rta.dao.tabela.TabelaDAO;
+import br.com.guarani.rta.dao.tabela.TabelaDAOimpl;
 import br.com.guarani.rta.entidade.Tabela;
 import br.com.guarani.rta.entidade.Tabelas;
-
 
 @Component
 @Path("/tabelas")

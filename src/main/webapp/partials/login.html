@@ -8,17 +8,37 @@
         <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
         <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="assets/font-awesome/css/font-awesome.min.css">
+        
 		<link rel="stylesheet" href="assets/css/form-elements.css">
         <link rel="stylesheet" href="assets/css/style.css">
+         
+       
+        
         <link rel="shortcut icon" href="assets/ico/favicon.png">
         <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
         <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
         <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/apple-touch-icon-72-precomposed.png">
-        <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">  
+
+
+	
+		<script type="text/javascript">
+	 
+	    jQuery(document).ready(function($) {
+	 
+	            $("#cnpj").mask("99.999.999/9999-99");    // Máscara para CNPJ
+	
+	 
+	     }); 
+	 
+		 </script>
+	
+
 
 </head>
 
-
+ 
+		<script type="text/javascript">$(document).ready(function(){	$("#username").mask("99.999.999/9999-99");});</script>
 
 	
 	
@@ -35,7 +55,7 @@
 	<div class="header-parallax" data-stellar-background-ratio="0.5">
 	<div class="slidersection">
 	
-	
+<form novalidate name="formulario" class="row" ng-submit="login()"> 
 	<div class="animated fadeInUp delay-1s">
 		<!-- Top content -->
 	      <div class="top-content">
@@ -45,35 +65,38 @@
                         	<div class="form-top">
                         		<div class="form-top-left">
                         			<h3>Login</h3>
-                            		<p>Lorem ipsum dolor sit amet:</p>
+                            		<p ng-show="mensagem.length" class="alert alert-info">{{mensagem}}</p>
                         		</div>
                         		<div class="form-top-right">
                         			<i class="fa fa-key"></i>
                         		</div>
                             </div>
+                            
+                            
                             <div class="form-bottom">
-			                    	<div class="form-group">
-			                    		<label class="sr-only" for="form-username">Username</label>
-			                        	<input id="username" ng-model="username" type="text" name="form-username" placeholder="CNPJ" class="form-username form-control" />
-			                        	
-			                        </div>
+			                         
+								  <div class="form-group">
+										<label class="sr-only" for="form-username">Username</label>
+										CNPJ
+										<input  id="username" ng-model="username" type="text" name="username" 
+										 class="form-username form-control" ui-mask="999.999.999-99" required />
+								  </div> 
 			                        <div class="form-group">
 			                        	<label class="sr-only" for="form-password">Password</label>
-			                        	<input id="password" ng-model="password" type="password" name="form-password" placeholder="Senha" class="form-password form-control" />
-			                        	
-			                        </div>
-			                        
-						             <input type="submit" value="Log In" class="btn"
-									  ng-click="login()" />
+			                        	Senha
+			                        	<input  id="password" ng-model="password" type="password" name="form-password"
+			                        	  class="form-password form-control" required />
+			                        </div> 
+						             <input  type="submit" value="Log In" class="btn"
+						              ng-keypress="keypressHandler($event, 4)" ng-disabled="formulario.$invalid"/>
 		                    </div>
                         </div>
                     </div>
-                   
-                </div>
+                </div> 
             </div>    
         </div>
-            
-            
-   
+ </form>           
+ 
+  
             
             
